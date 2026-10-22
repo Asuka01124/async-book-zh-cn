@@ -13,7 +13,7 @@
 - [并发编程](part-guide/concurrency.md)
 - [Async 与 Await](part-guide/async-await.md)
 - [更多 async/await 主题](part-guide/more-async-await.md)
-- [IO and issues with blocking](part-guide/io.md)
+- [IO 与阻塞问题](part-guide/io.md)
 - [Composing futures concurrently](part-guide/concurrency-primitives.md)
 - [Channels, locking, and synchronization](part-guide/sync.md)
 - [Tools for async programming](part-guide/tools.md)
