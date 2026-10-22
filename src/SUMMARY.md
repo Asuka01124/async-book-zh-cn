@@ -7,9 +7,9 @@
   - [FAQs]()
   - [Index](navigation/index.md)
 
-# Part 1: guide
+# 第 1 部分：指南
 
-- [Introduction](part-guide/intro.md)
+- [指南导读](part-guide/intro.md)
 - [Concurrent programming](part-guide/concurrency.md)
 - [Async and await](part-guide/async-await.md)
 - [More async/await topics](part-guide/more-async-await.md)
