@@ -10,7 +10,7 @@
 # 第 1 部分：指南
 
 - [指南导读](part-guide/intro.md)
-- [Concurrent programming](part-guide/concurrency.md)
+- [并发编程](part-guide/concurrency.md)
 - [Async and await](part-guide/async-await.md)
 - [More async/await topics](part-guide/more-async-await.md)
 - [IO and issues with blocking](part-guide/io.md)
