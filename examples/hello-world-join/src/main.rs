@@ -1,7 +1,7 @@
 use tokio::{spawn, time::{sleep, Duration}};
 
 async fn say_hello() {
-    // Wait for a while before printing to make it a more interesting race.
+    // 打印前等待一会儿，让竞争过程更有意思。
     sleep(Duration::from_millis(100)).await;
     println!("hello");
 }

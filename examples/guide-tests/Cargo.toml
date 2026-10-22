@@ -1,0 +1,12 @@
+[package]
+name = "async-guide-tests"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# 独立的验证 crate，避免改变上游旧示例工作区的依赖与成员。
+[workspace]
+
+[dependencies]
+tokio = { version = "1", features = ["full", "test-util"] }
+futures = "0.3"

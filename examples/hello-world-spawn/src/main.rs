@@ -1,7 +1,7 @@
 use tokio::{spawn, time::{sleep, Duration}};
 
 async fn say_hello() {
-    // Wait for a while before printing to make it a more interesting race.
+    // 打印前等待一会儿，让竞争过程更有意思。
     sleep(Duration::from_millis(100)).await;
     println!("hello");
 }
@@ -15,6 +15,6 @@ async fn say_world() {
 async fn main() {
     spawn(say_hello());
     spawn(say_world());
-    // Wait for a while to give the tasks time to run.
+    // 等待一会儿，让任务有时间运行。
     sleep(Duration::from_millis(1000)).await;
 }
