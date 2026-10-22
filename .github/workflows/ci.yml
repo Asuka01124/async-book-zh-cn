@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - master
+      - codex/zh-cn
 
 permissions: {}
 
@@ -25,12 +25,7 @@ jobs:
       - name: Install mdbook
         uses: taiki-e/install-action@8cca0918f8471c33515202b73f56ab27f2bed283 # v2.87.29
         with:
-          tool: mdbook
-      - name: Install mdbook-linkcheck2
-        uses: taiki-e/install-action@8cca0918f8471c33515202b73f56ab27f2bed283 # v2.87.29
-        with:
-          tool: mdbook-linkcheck2
-          fallback: cargo-install
+          tool: mdbook@0.5.4
       - run: mdbook build
       - run: cargo test --all --manifest-path=./examples/Cargo.toml --target-dir ./target
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
