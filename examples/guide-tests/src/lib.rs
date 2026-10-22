@@ -2,3 +2,4 @@
 pub mod basics;
 pub mod more;
 pub mod io;
+pub mod composition;
