@@ -21,12 +21,15 @@ class Page(HTMLParser):
     def __init__(self, path: Path):
         super().__init__()
         self.ids: set[str] = set()
+        self.duplicate_ids: set[str] = set()
         self.links: list[str] = []
         self.feed(path.read_text(encoding="utf-8"))
 
     def handle_starttag(self, tag, attrs):
         values = dict(attrs)
         if values.get("id"):
+            if values["id"] in self.ids:
+                self.duplicate_ids.add(values["id"])
             self.ids.add(values["id"])
         if tag == "a" and values.get("name"):
             self.ids.add(values["name"])
@@ -53,6 +56,8 @@ def check(chapters: list[str], output: Path) -> list[str]:
             continue
         if html not in cache:
             cache[html] = Page(html)
+        for duplicate in cache[html].duplicate_ids:
+            errors.append(f"{chapter}: HTML id 重复：{duplicate}")
         for href in cache[html].links:
             url = urlsplit(href)
             if url.scheme or url.netloc or url.path.startswith("/"):

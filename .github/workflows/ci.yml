@@ -1,12 +1,14 @@
-name: CI
+name: 中文书籍与示例检查
 
 on:
   pull_request:
   push:
     branches:
       - codex/zh-cn
+  workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -27,25 +29,11 @@ jobs:
         with:
           tool: mdbook@0.5.4
       - run: mdbook build
-      - run: cargo test --all --manifest-path=./examples/Cargo.toml --target-dir ./target
-      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
-        with:
-          path: book/html
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository_owner == 'rust-lang'
-
-  # Deploy is run as a separate job as it needs elevated permissions
-  deploy:
-    name: deploy
-    needs: test  # the `test` job uploads the pages artifact
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository_owner == 'rust-lang'
-    permissions:
-      pages: write # Required by `actions/deploy-pages` to deploy to Pages
-      id-token: write # Required by `actions/deploy-pages` to verify the deployment originates from an appropriate source
-    environment:
-      name: github-pages
-      url: ${{steps.deployment.outputs.page_url}}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
-        id: deployment
+      - name: 检查六章正文与本地链接
+        run: python3 scripts/check_chapters.py
+      - name: 检查原有示例
+        run: cargo test --workspace --manifest-path examples/Cargo.toml --target-dir target
+      - name: 检查新版指南示例
+        run: cargo test --locked --manifest-path examples/guide-tests/Cargo.toml --target-dir target/guide-tests
+      - name: 检查新版示例格式
+        run: cargo fmt --manifest-path examples/guide-tests/Cargo.toml --check

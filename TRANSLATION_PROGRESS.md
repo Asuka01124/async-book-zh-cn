@@ -2,6 +2,20 @@
 
 本次范围：新版指南前六章。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。上游基线：`840327a`。各章逐章翻译、校审、验证、提交并推送后，再开始下一章。书前导言暂保留上游英文，基础设施由主代理负责。
 
+## 本轮最终本地复核
+
+2026-10-22，六章均已逐章提交并上传。章节提交索引见 README。主代理在第六章上传后重新执行以下检查，全部通过：
+
+- mdBook 0.5.4：`mdbook build --dest-dir .tools/final-book`。
+- `python scripts/check_chapters.py --output .tools/final-book`：六章均无 TODO/FIXME、空链接、无效本地文件或锚点、重复 HTML id。
+- 用户既有 Rust 1.96.0：`cargo +1.96.0 test --offline --workspace --manifest-path examples/Cargo.toml --target-dir target`，13 个测试通过、0 失败；保留上游既有警告。
+- `cargo +1.96.0 test --offline --locked --manifest-path examples/guide-tests/Cargo.toml --target-dir target/guide-tests`，29 个测试通过、0 失败；本机 TCP 测试真实执行。
+- `cargo +1.96.0 fmt --manifest-path examples/guide-tests/Cargo.toml --check` 与 `git diff --check` 通过。
+
+共计 42 个测试通过。最终测试禁用增量缓存，使用已有工具链，不跳过本机网络测试。外部服务、特定文件输入和 Linux 专属路径的验证边界仍按各章记录，不将其计入已运行范围。
+
+按用户后续要求，不再查询或等待 GitHub Actions；CI 由用户自行查看。其余章节及书前导言尚未翻译，本轮在六章处结束。
+
 ## 第 1 章：指南导读
 
 - 文件：`src/part-guide/intro.md`；目录条目同步为中文。
