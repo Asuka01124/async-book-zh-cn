@@ -164,3 +164,10 @@
 - 父代理指出Waker的clone/drop也可能有自定义回调。已将Receiver的新Waker克隆放到锁外，旧Waker经replace/take移出，在释放Mutex后销毁，正文补充此约束。
 - 新增确定性Wake::Drop探针，用try_lock验证替换旧注册与取消注销时锁已释放；14章5测试通过，累计70。没有通过真的制造死锁进行验证。
 - 重建原输出目录遇OneDrive拒绝删除旧目录，改用`.tools/round3-chapter-14-review`成功构建；前14章检查、fmt/diff检查通过。独立追加提交，不重写已推历史。
+## 第三轮（2026-10-24）：第 15 章，替代运行时
+
+- 上游只有英文目录标题，Luna翻译标题，Sol原创完整中文正文并接通alternate-runtimes.md。解释Future协议与运行时环境的区别、执行器/驱动器/库/应用生命周期，以及平台/调度/内存所有权/生态适配与维护状态选择。
+- 核查futures executor、smol及LocalExecutor/Task、async-io、Glommio、Monoio官方仓库、tokio-uring、Embassy、async-compat与async-std官方README。明确async-std已停止维护；Monoio不能概括为仅Linux但Windows仍实验；io_uring运行时不等于普通Tokio开关。
+- 新增smol =2.0.2，离线缓存依赖可用，锁文件新增22包。新增alternate.rs并include，3测试在Windows通过：LocalExecutor非Send任务与真实计时器；真实Pending任务丢句柄取消后析构；同一独立Future由smol与futures执行器分别驱动。累计73测试，本章过滤新增3个。
+- 没有运行Glommio/Monoio/tokio-uring/Embassy，也没有运行适配器或网络性能基准；Linux/macOS/嵌入式边界正文明确。
+- Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-15`、前15章HTML/链接/锚点/未完成标记与git diff --check通过。不监听CI。
