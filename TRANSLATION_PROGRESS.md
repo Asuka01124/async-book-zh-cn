@@ -185,3 +185,11 @@
 - 新增rayon=1.12.0及5个锁包，离线缓存编译。实际打开Tokio bridging、Handle、block_in_place、spawn_blocking、mpsc Sender/Receiver、oneshot及Rayon ThreadPool官方资料。
 - 不宣称取消已开始阻塞工作或CPU计算；未使用真实数据库/GUI/外部服务，未制造不可恢复的死锁。
 - Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-17`、前17章HTML/链接/锚点/未完成标记与git diff --check通过。不监听CI。
+## 第三轮（2026-10-24）：第 18 章，异步 I/O：就绪与完成，以及 io_uring
+
+- 上游只有目录标题，Luna翻译标题，Sol原创完整中文正文，新增io-models.md并接通目录。完整解释readiness/completion、epoll/kqueue、IOCP与Mio/AFD桥接、io_uring SQ/CQ与multishot、buffer稳定地址/所有权/初始化、Future取消与内核完成/资源回收、平台及运行时差异。
+- 特别核查Tokio1.54.1：Windows以IOCP后端暴露就绪API；默认普通文件操作通常使用blocking池，同时Linux已有tokio_unstable与io-uring功能限制的实验文件driver。实际打开官方docs并核对本机Tokio/Mio源码，不沿用“Tokio绝无io_uring”的过时概括。
+- 新增io_models.rs，正文include真实readiness辅助函数和明确标注的内存生命周期模型。4测试通过：Windows真实TCP就绪循环/分段字节/EOF，先真实Pending再取消借用read并重新读取；纯模型取消后保留操作buffer与模拟完成唤醒。真实网络测试使用已授权提权执行，没有用沙箱网络限制跳过。累计86测试，本章过滤新增4个，无新依赖。
+- 正文明确累计read_until_eof取消会丢弃已读out，不承诺整函数无损重试；内存模型不是IOCP/io_uring封装，不含完整driver关闭/错误通路。Linux epoll/io_uring、BSD/macOS kqueue、原生Windows IOCP/CancelIoEx与Tokio实验文件driver均未编译运行，文档/源码核查不计作内核验证。
+- 实际打开epoll/Linux io_uring/liburing取消及multishot手册、FreeBSD kqueue、Microsoft IOCP/ReadFile/CancelIoEx、Mio Poll/AFD源码、Tokio TcpStream/fs/Builder及tokio-uring IoBuf/IoBufMut官方资料。
+- Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-18-final`、全部前18章HTML/链接/锚点/未完成标记及git diff --check通过。不查询或监听CI；本轮到18章停止，Design patterns及后续未修改。

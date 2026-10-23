@@ -29,7 +29,7 @@
 - [替代运行时](part-reference/alternate-runtimes.md)
 - [实现你自己的运行时](part-reference/implementing-runtime.md)
 - [同步中的异步，异步中的同步](part-reference/sync-async.md)
-- [Async IO: readiness vs completion, and io_uring]()
+- [异步 I/O：就绪与完成，以及 io_uring](part-reference/io-models.md)
 - [Design patterns]()
 - [Cancellation and cancellation safety](part-reference/cancellation.md) (cancellation safety)
 - [Starvation]()
