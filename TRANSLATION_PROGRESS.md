@@ -1,8 +1,21 @@
 # 翻译与补全进度
 
-已完成第一轮新版指南第 1—6 章（2026-10-22）；第二轮在 2026-10-23 按顺序续做第 7—12 章，第 13 章不在本轮范围。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。上游基线：`840327a`。各章逐章翻译、校审、验证、提交并推送后，再开始下一章。书前导言暂保留上游英文，基础设施由主代理负责。下文第一轮日期与结果保留为历史证据；第二轮结果逐章追加。
+已完成新版指南第 1—12 章：第一轮第 1—6 章（2026-10-22），第二轮第 7—12 章（2026-10-23）。第 13 章不在第二轮范围。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。上游基线：`840327a`。各章逐章翻译、校审、验证、提交并推送后，再开始下一章。书前导言暂保留上游英文，基础设施由主代理负责。第一轮日期与结果保留为历史证据，第二轮结果单独记录。
 
-## 本轮最终本地复核
+## 第二轮最终本地复核（2026-10-23）
+
+第 7—12 章主提交及第 10 章措辞复核提交均已上传，提交索引见 README。主代理已逐章阅读六章成品，对照上游原始提纲确认主题覆盖，并在第 12 章完成后执行以下累计复核：
+
+- mdBook 0.5.4：`mdbook build --dest-dir .tools/round2-final-book` 成功。
+- `python scripts/check_chapters.py --output .tools/round2-final-book`：12 章通过未完成标记、空链接、本地文件、锚点和重复 HTML id 检查。
+- 用户已有 Rust 1.96.0：`cargo +1.96.0 test --offline --workspace --manifest-path examples/Cargo.toml --target-dir target`，13 个测试通过、0 失败，保留上游原有警告。
+- `cargo +1.96.0 test --offline --locked --manifest-path examples/guide-tests/Cargo.toml --target-dir target/guide-tests`，61 个测试通过、0 失败，无编译警告。本轮新增 32 个，包含 Loom 正反模型和实际本机 TCP 测试。
+- `cargo +1.96.0 fmt --manifest-path examples/guide-tests/Cargo.toml --check`、`git diff --check` 通过；禁用增量缓存以避免 OneDrive 缓存干扰。
+- 检查各章提交均为当前 HEAD 的祖先；与第二轮开始前的 `9aa2a74` 比较，第 13 章 `streams.md` 保持原样。
+
+累计 74 个测试通过。Windows 信号函数已在本机编译但未调用；没有发送真实控制台中断。Unix cfg 分支、平台专用工具、实验 AsyncDrop 及其他未运行范围仍按逐章记录说明，不把注入 Future 测试算作操作系统信号端到端验证。不查询、监听或等待 CI。
+
+## 首轮最终本地复核（2026-10-22）
 
 2026-10-22，六章均已逐章提交并上传。章节提交索引见 README。主代理在第六章上传后重新执行以下检查，全部通过：
 
@@ -14,7 +27,7 @@
 
 共计 42 个测试通过。最终测试禁用增量缓存，使用已有工具链，不跳过本机网络测试。外部服务、特定文件输入和 Linux 专属路径的验证边界仍按各章记录，不将其计入已运行范围。
 
-按用户后续要求，不再查询或等待 GitHub Actions；CI 由用户自行查看。其余章节及书前导言尚未翻译，本轮在六章处结束。
+按用户后续要求，不再查询或等待 GitHub Actions；CI 由用户自行查看。首轮在第六章处结束，第二轮续译结果见本文件对应记录。
 
 ## 第 1 章：指南导读
 
@@ -71,7 +84,7 @@
 - Rust验证：`cargo +1.96.0 test --offline --manifest-path examples/guide-tests/Cargo.toml --target-dir target/guide-tests`累计29测试全部通过，本章新增10测试：IntoFuture，join保留错误并等待其他分支，try_join销毁拥有分支，任务嵌套Result，guard/创建/轮询顺序，模式不匹配else/handler值，超时分支，借用竞争后继续，空闲/总期限差异，Fuse完成后Pending。由于含本机TCP测试，使用已授权的提权执行；无编译警告。
 - 文档验证：`mdbook build --dest-dir .tools/build-chapter-6-final`、六章HTML/本地链接/英文锚点/重复id检查、`git diff --check`与`cargo fmt --check`均通过。
 
-## 本轮范围完成
+## 首轮范围完成（第 1—6 章）
 
 六章均由 GPT-6 Luna 逐章翻译，GPT-6.1 Sol 逐章补全与验收，每章验收后独立提交并上传，再开始下一章。上游显式待写标记（第3章1处、第5章4处）及第4章5节实质提纲已补齐；第1章和第4章共3个正文空链接已处理。原英文标题的必要别名保留，英文标题本身不重复添加同名id。
 

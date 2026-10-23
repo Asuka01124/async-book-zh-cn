@@ -29,7 +29,7 @@ jobs:
         with:
           tool: mdbook@0.5.4
       - run: mdbook build
-      - name: 检查六章正文与本地链接
+      - name: 检查已完成章节正文与本地链接
         run: python3 scripts/check_chapters.py
       - name: 检查原有示例
         run: cargo test --workspace --manifest-path examples/Cargo.toml --target-dir target

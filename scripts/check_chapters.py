@@ -14,6 +14,9 @@ CHAPTERS = (
     "part-guide/intro.md", "part-guide/concurrency.md",
     "part-guide/async-await.md", "part-guide/more-async-await.md",
     "part-guide/io.md", "part-guide/concurrency-primitives.md",
+    "part-guide/sync.md", "part-guide/tools.md",
+    "part-guide/dtors.md", "part-guide/futures.md",
+    "part-guide/runtimes.md", "part-guide/timers-signals.md",
 )
 
 
