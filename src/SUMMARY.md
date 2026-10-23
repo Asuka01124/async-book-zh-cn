@@ -15,7 +15,7 @@
 - [更多 async/await 主题](part-guide/more-async-await.md)
 - [IO 与阻塞问题](part-guide/io.md)
 - [并发组合 Future](part-guide/concurrency-primitives.md)
-- [Channels, locking, and synchronization](part-guide/sync.md)
+- [通道、锁与同步](part-guide/sync.md)
 - [Tools for async programming](part-guide/tools.md)
 - [Destruction and clean-up](part-guide/dtors.md)
 - [Futures](part-guide/futures.md)
