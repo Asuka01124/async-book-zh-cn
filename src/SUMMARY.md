@@ -18,7 +18,7 @@
 - [通道、锁与同步](part-guide/sync.md)
 - [异步编程工具](part-guide/tools.md)
 - [析构与清理](part-guide/dtors.md)
-- [Futures](part-guide/futures.md)
+- [Future 详解](part-guide/futures.md)
 - [Runtimes](part-guide/runtimes.md)
 - [Timers and signal handling](part-guide/timers-signals.md)
 - [Async iterators (streams)](part-guide/streams.md)

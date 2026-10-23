@@ -6,3 +6,4 @@ pub mod composition;
 pub mod sync;
 pub mod tools;
 pub mod cleanup;
+pub mod future_details;

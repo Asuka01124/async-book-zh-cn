@@ -99,3 +99,10 @@
 - 2026-10-23实际打开Rust AsyncDrop文档（仍标nightly-only）、Unstable Book async_drop、#126482、析构Reference、Tokio JoinHandle/Runtime关闭、CancellationToken和优雅关闭文档；正文链接记录状态，不执行nightly特性。
 - 新增 `guide-tests/src/cleanup.rs`，正文include可编译显式finish和协作关闭。5测试真实通过：缓冲刷新与EOF、未完成缓冲丢弃、abort后同步析构已结束、panic后锁释放但数据未恢复、协作关闭先于join。累计44测试，本章运行新增5个，旧39个留最终统一复核。
 - `.tools/round2-chapter-9`构建、前9章HTML/链接/锚点/待写标记检查、cargo fmt与git diff --check通过。未模拟强杀进程或实验AsyncDrop；不监听CI。
+
+## 第二轮（2026-10-23）：第 10 章，Future 详解
+
+- GPT-6 Luna逐项翻译（首段亦译为中文），GPT-6.1 Sol扩写与技术校审。Future/Output、IntoFuture及异步builder、装箱/动态分派/递归、poll/Poll/await/唤醒/取消、原空Fusing节、futures-rs历史/用途/TryFuture/辅助Future/组合器/执行器/IO差异，以及futures-concurrency均实质补齐。
+- 修正Ready后重复poll无一般保证、Fuse不缓存输出、Pin不阻止销毁、now_or_never会消费丢弃、泛型Future与IntoFuture约束不同、当前Tokio宏版本转换支持。补充race空集panic及丢JoinHandle的拥有关系边界。
+- 新增 `guide-tests/src/future_details.rs`，正文include五组源码。新增4测试通过：Pending安排wake后Ready、builder/借用装箱/错误传播/join、race拥有输家销毁、纯Future由futures executor驱动。锁定futures-concurrency7.7.1并离线编译；累计48测试，本章执行新增4个，旧44个留最终统一复核。
+- 2026-10-23实际打开标准库Future/IntoFuture、futures FutureExt/TryFuture/Fuse/executor、futures-concurrency及Race官方文档，正文附来源。Rust1.96、cargo fmt、`.tools/round2-chapter-10`构建与前10章HTML/链接/锚点/待写标记检查、git diff --check通过；不监听CI。
