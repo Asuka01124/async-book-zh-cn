@@ -19,7 +19,7 @@
 - [异步编程工具](part-guide/tools.md)
 - [析构与清理](part-guide/dtors.md)
 - [Future 详解](part-guide/futures.md)
-- [Runtimes](part-guide/runtimes.md)
+- [运行时及其使用边界](part-guide/runtimes.md)
 - [Timers and signal handling](part-guide/timers-signals.md)
 - [Async iterators (streams)](part-guide/streams.md)
 

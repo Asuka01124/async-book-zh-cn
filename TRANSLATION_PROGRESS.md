@@ -110,3 +110,11 @@
 ### 第 10 章提交后的措辞复核
 
 父代理复核指出Waker的执行方式属于执行器，正文已改为不依赖轮询线程/时机；将“某个ready()仍可轮询”改为某些具体Future支持重复轮询，避免误指标准库Ready。修改仅限描述，不改源码和测试；重新构建并检查前10章通过。
+
+## 第二轮（2026-10-23）：第 11 章，运行时及其使用边界
+
+- GPT-6 Luna翻译，GPT-6.1 Sol补全与校审。原运行启动/异步main、上下文/block_on/Runtime/Handle/关闭，线程任务/Send与static/yield/spawn_local/spawn_blocking/block_in_place/队列，配置/线程池/单线程/每核线程，替代运行时/自建目的与设计差异等主题逐项补齐。
+- 特别解释enter不驱动、构造计时器参数的求值时机、current_thread上的Handle::block_on不驱动IO/时间、Handle不保活、LocalSet根上下文及run_until非全量join、join分支在block_in_place中同任务暂停、关闭超时不杀线程；队列行为只作版本实现说明。
+- 新增 `guide-tests/src/runtime_details.rs` 并正文include。Rust1.96新增7测试全部真实通过：显式启动与enter差异、LocalSet剩余任务恢复、多线程block_in_place重新进入、单线程拒绝（预期panic）、嵌套Handle block_on拒绝（预期panic）、Handle不延长运行时生命周期/任务析构、shutdown_timeout后已开始阻塞任务仍完成。累计55测试，本章过滤执行7个，旧48个留最终统一复核。
+- 2026-10-23实际打开Tokio runtime/Runtime/Handle/Builder/LocalSet/block_in_place/spawn_blocking/yield以及smol、Glommio、tokio-uring官方文档；必要来源在正文。其他运行时、Linux每核线程和io_uring未在Windows执行。
+- cargo fmt、`.tools/round2-chapter-11`构建、前11章HTML/链接/锚点/待写标记检查与git diff --check通过，不监听CI。
