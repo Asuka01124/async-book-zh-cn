@@ -21,7 +21,7 @@
 - [Future 详解](part-guide/futures.md)
 - [运行时及其使用边界](part-guide/runtimes.md)
 - [定时器与信号处理](part-guide/timers-signals.md)
-- [Async iterators (streams)](part-guide/streams.md)
+- [异步迭代器（Stream）](part-guide/streams.md)
 
 # Part 2: reference
 
@@ -75,4 +75,3 @@
   - [TODO: Modeling Servers and the Request/Response Pattern]()
   - [TODO: Managing Shared State]()
 - [Appendix: Translations of the Book](12_appendix/01_translations.md)
-

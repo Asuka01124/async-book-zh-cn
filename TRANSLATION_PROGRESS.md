@@ -146,3 +146,9 @@
 第7—12章均按Luna逐章翻译→Sol实质补全/源码验证→该章独立提交并上传→下一章执行。原有实质提纲均补成解释、用法、错误边界与示例，不以删除标记代替补写。第10章上传后根据父代理复核另追加Waker/重复轮询契约措辞修正，保留原提交历史。
 
 独立验证crate由29测试增至61测试（新增32个），六章分别运行新增6/4/5/4/7/6个测试全部通过。新增依赖均写入独立crate锁文件，未改变上游旧示例工作区；最终全量旧工作区和61测试由主代理在本轮结束后统一复核并记录。平台专用工具、Unix代码、实验AsyncDrop及真实信号端到端验证边界见对应章节，不计入本机运行通过。未查询、监听或等待CI。
+## 第三轮（2026-10-24）：第 13 章，异步迭代器（Stream）
+
+- GPT-6 Luna逐项翻译原英文提纲，GPT-6.1 Sol补齐正文并验收。涵盖Stream模型/惰性/固定/融合、next与消费、collect/into_future、异步组合器与有序/无序缓冲、并发限制、动态StreamGroup、join/select/race与循环取消、手写trait/unfold/库宏、Sink背压/flush/close，以及标准化/生成器/lending边界。
+- 新增共享源码streams.rs，正文include真实锚点。4测试通过：惰性/固定/融合、有序与无序缓冲及并发上限、动态组移除与发送关闭、竞争后接收状态保留；累计65个。本章只运行新增4个。
+- 实际打开futures Stream/StreamExt/FusedStream/unfold/Sink、Tokio StreamExt、StreamGroup、async-stream、标准库AsyncIterator、RFC2996与Unstable Book gen_blocks官方文档。2026-10-24 AsyncIterator仍nightly-only；第三方流宏未新增依赖/未实测，语言实验未运行。
+- Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-13`、前13章HTML/链接/锚点/未完成标记及git diff --check通过。没有监听CI。
