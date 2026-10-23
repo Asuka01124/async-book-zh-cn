@@ -17,6 +17,12 @@ CHAPTERS = (
     "part-guide/sync.md", "part-guide/tools.md",
     "part-guide/dtors.md", "part-guide/futures.md",
     "part-guide/runtimes.md", "part-guide/timers-signals.md",
+    "part-guide/streams.md",
+    "part-reference/implementing-futures-streams.md",
+    "part-reference/alternate-runtimes.md",
+    "part-reference/implementing-runtime.md",
+    "part-reference/sync-async.md",
+    "part-reference/io-models.md",
 )
 
 

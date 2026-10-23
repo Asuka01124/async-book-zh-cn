@@ -1,6 +1,19 @@
 # 翻译与补全进度
 
-已完成新版指南第 1—12 章：第一轮第 1—6 章（2026-10-22），第二轮第 7—12 章（2026-10-23）。第 13 章不在第二轮范围。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。上游基线：`840327a`。各章逐章翻译、校审、验证、提交并推送后，再开始下一章。书前导言暂保留上游英文，基础设施由主代理负责。第一轮日期与结果保留为历史证据，第二轮结果单独记录。
+已完成新版指南全部 13 章和参考篇前五章，累计 18 项：第一轮第 1—6 章（2026-10-22），第二轮第 7—12 章（2026-10-23），第三轮为指南第 13 章及参考篇前五章（2026-10-24）。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。参考篇这五项上游只有目录标题，Luna 翻译标题，Sol 原创补写正文。上游基线：`840327a`。各章逐章翻译、校审、验证、提交并推送后，再开始下一章。书前导言、参考篇其余部分及旧版章节暂保留上游内容；各轮日期与结果保留为历史证据。
+
+## 第三轮最终本地复核（2026-10-24）
+
+本轮六章主提交及第 14 章 Waker 锁边界追加修正均保留独立历史，提交索引见 README。主代理逐章阅读成品和新增共享源码，对照原提纲验收，参考篇原空目录则按主题完整补写。第 18 章完成后统一执行：
+
+- mdBook 0.5.4：`mdbook build --dest-dir .tools/round3-final-book` 成功。
+- `python scripts/check_chapters.py --output .tools/round3-final-book`：18 篇已完成章节通过未完成标记、空链接、本地文件、锚点和重复 HTML id 检查；默认检查范围已扩展至本轮六章。
+- 用户已有 Rust 1.96.0：`cargo +1.96.0 test --offline --workspace --manifest-path examples/Cargo.toml --target-dir target`，13 个原有测试通过、0 失败，保留上游既有警告。
+- `cargo +1.96.0 test --offline --locked --manifest-path examples/guide-tests/Cargo.toml --target-dir target/guide-tests`，86 个测试通过、0 失败、无编译警告。本轮新增 25 个（4/5/3/4/5/4），含第 14 章追加回归测试；真实本机 TCP 测试获得所需权限执行，没有跳过。
+- `cargo +1.96.0 fmt --manifest-path examples/guide-tests/Cargo.toml --check`、`git diff --check` 通过；禁用增量缓存以避免 OneDrive 缓存干扰。
+- 六章提交和追加修正均为 HEAD 祖先。对比第三轮开始前的 `8ce59b4`，书籍源码只改变本轮六篇与 SUMMARY；Design patterns 及后续参考主题、旧版章节、书前导言保持原样，既有 Pages 工作流保留。
+
+累计 99 个测试通过。本轮使用 Windows，Linux epoll/io_uring、BSD/macOS kqueue、原生 IOCP/CancelIoEx、其他平台运行时和 Tokio 实验文件后端未编译运行；内存生命周期模型和文档核查不算内核验证。各章具体边界见下文。不查询、监听或等待 CI。
 
 ## 第二轮最终本地复核（2026-10-23）
 

@@ -4,7 +4,7 @@
 
 ## 本轮范围与工作流
 
-已完成新版指南第 1—12 章：第一轮（2026 年 10 月 22 日）完成第 1—6 章，第二轮（2026 年 10 月 23 日）完成第 7—12 章。第 13 章“异步迭代器”、参考篇、旧版章节和书前导言仍保留上游内容。
+已完成新版指南全部 13 章，以及参考篇前五章，累计 18 项。第一轮（2026 年 10 月 22 日）完成第 1—6 章，第二轮（2026 年 10 月 23 日）完成第 7—12 章；第三轮（2026 年 10 月 24 日）完成指南最后一章“异步迭代器”和参考篇前五章。参考篇其余章节、旧版章节和书前导言仍保留上游内容。
 
 | 章节 | 逐章验收提交 |
 | --- | --- |
@@ -28,9 +28,24 @@
 
 第 10 章另有[措辞复核提交 f24d6e5](https://github.com/Asuka01124/async-book-zh-cn/commit/f24d6e5d9cf5357cb4576fc4c70a8f46b0080d9a)，用于校准唤醒和重复轮询的契约描述。
 
+第三轮已按目录顺序逐章验收并上传以下六项，编号沿用项目的累计完成顺序：
+
+| 章节 | 逐章验收提交 |
+| --- | --- |
+| [异步迭代器](src/part-guide/streams.md) | [e25ab4c](https://github.com/Asuka01124/async-book-zh-cn/commit/e25ab4cf07c68fa45be33d58b8aaea39b2c497e9) |
+| [实现 Future 与 Stream](src/part-reference/implementing-futures-streams.md) | [076fc07](https://github.com/Asuka01124/async-book-zh-cn/commit/076fc076abe868369d3a75d2dfd5fb50a9a00308) |
+| [替代运行时](src/part-reference/alternate-runtimes.md) | [caf55fa](https://github.com/Asuka01124/async-book-zh-cn/commit/caf55fa5d4ed9c76b69310ff7846742412e8e26a) |
+| [实现自己的运行时](src/part-reference/implementing-runtime.md) | [d16ea8a](https://github.com/Asuka01124/async-book-zh-cn/commit/d16ea8afd28967a680f3aef2106386ad73322ffd) |
+| [同步与异步互调](src/part-reference/sync-async.md) | [434e5a2](https://github.com/Asuka01124/async-book-zh-cn/commit/434e5a2b885ca45ac07b974d3c6d7fadfbd861ee) |
+| [异步 I/O：就绪与完成，以及 io_uring](src/part-reference/io-models.md) | [cd9a1d9](https://github.com/Asuka01124/async-book-zh-cn/commit/cd9a1d9e20700c36796d1c8d80f5555cde2a1222) |
+
+参考篇这五项原本只有空目录标题，没有英文正文。Luna 翻译已有标题，Sol 补写中文正文；不将新写内容标为已有原文的翻译。
+
+第 14 章另有[Waker 回调锁边界复核提交 34ebd75](https://github.com/Asuka01124/async-book-zh-cn/commit/34ebd75bd0ff8d808d839c762a975c7397f39057)，并新增析构重入的回归测试。
+
 每章按顺序进行：GPT-6 Luna 子代理翻译 → GPT-6.1 Sol 补全 TODO 并验收 → 构建及相关代码检查 → 单独提交并推送。验收包含原文完整性、术语、技术准确性、示例和内部链接，技术补充优先查证官方文档。实际完成情况和检查证据见 [逐章记录](TRANSLATION_PROGRESS.md)。
 
-第二轮最终本地复核通过：书籍构建、12 章链接与锚点检查、13 个原有测试和 61 个新版指南验证测试（累计 74 个），以及新增示例的格式检查。本轮新增 32 个测试。Windows 信号函数已编译，但未触发真实信号；Unix 分支及平台专用工具的验证边界详见逐章记录。CI 留给仓库所有者自行查看，不作为上传的等待条件。
+第三轮最终本地复核通过：书籍构建、18 篇已完成章节的链接与锚点检查、13 个原有测试和 86 个指南及参考篇验证测试（累计 99 个），以及新增示例的格式检查。本轮新增 25 个测试，包含真实 Windows 回环 TCP、跨线程唤醒、取消与关闭验证。Linux io_uring、原生 IOCP 接口、其他平台专用运行时及实验功能未运行，文档核查与内存模型不计作内核验证；详细边界见逐章记录。CI 留给仓库所有者自行查看，不作为上传的等待条件。
 
 ## 构建要求
 
@@ -56,7 +71,7 @@ mdbook build
 cargo test --workspace --manifest-path examples/Cargo.toml
 ```
 
-新版指南的补全示例使用独立验证 crate，正文通过 mdBook include 引用其中的源码：
+新版指南和参考篇的补全示例使用独立验证 crate，正文通过 mdBook include 引用其中的源码：
 
 ```sh
 cargo test --locked --manifest-path examples/guide-tests/Cargo.toml
