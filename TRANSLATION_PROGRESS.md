@@ -118,3 +118,18 @@
 - 新增 `guide-tests/src/runtime_details.rs` 并正文include。Rust1.96新增7测试全部真实通过：显式启动与enter差异、LocalSet剩余任务恢复、多线程block_in_place重新进入、单线程拒绝（预期panic）、嵌套Handle block_on拒绝（预期panic）、Handle不延长运行时生命周期/任务析构、shutdown_timeout后已开始阻塞任务仍完成。累计55测试，本章过滤执行7个，旧48个留最终统一复核。
 - 2026-10-23实际打开Tokio runtime/Runtime/Handle/Builder/LocalSet/block_in_place/spawn_blocking/yield以及smol、Glommio、tokio-uring官方文档；必要来源在正文。其他运行时、Linux每核线程和io_uring未在Windows执行。
 - cargo fmt、`.tools/round2-chapter-11`构建、前11章HTML/链接/锚点/待写标记检查与git diff --check通过，不监听CI。
+
+## 第二轮（2026-10-23）：第 12 章，定时器与信号处理
+
+- GPT-6 Luna翻译，GPT-6.1 Sol补全。原运行时集成/避免thread::sleep、Duration/Instant、sleep、interval、timeout及专用包装与select/race区别、信号含义/异步接入/操作系统差异/Tokio文档全部扩为正文。
+- 增补Sleep固定与reset、总期限/空闲期限、首次tick立即完成及Burst/Delay/Skip、非实时与非抢占超时/嵌套Result/JoinHandle分离、虚拟时钟；信号接入分别介绍Unix SIGINT/SIGTERM/SIGHUP、合并与默认处理器不恢复，Windows控制台事件/关闭窗口与服务协议差异，以及注入触发器测试方案。
+- 新增 `guide-tests/src/time_signals.rs`，正文include周期等待、超时取消任务、Unix/Windows信号及通知转发源码。6测试真实通过：完成前后reset、首次tick与三漏tick策略、零超时已就绪工作、借用JoinHandle超时继续、显式abort后析构完成、注入关闭成功/失败；累计61测试，本章执行6个，旧55个留主代理统一复核。
+- Rust1.96/Tokio1.54.1的cargo check --all-targets通过，Windows信号函数编译；没有调用它注册监听或向用户会话发送真实中断。Unix分支被cfg排除，仅核查官方API与源码，未编译/运行；注入Future测试不计作OS信号端到端测试。
+- 2026-10-23实际打开Tokio time/sleep/interval/MissedTickBehavior/timeout/pause/signal/ctrl_c/Unix Signal及signal函数/Windows模块和ctrl_close、Rust Instant、Microsoft HandlerRoutine及服务控制处理器官方文档，正文附来源。
+- cargo fmt、`.tools/round2-chapter-12`构建、全部12章HTML/链接/锚点/待写标记检查、git diff --check通过；不监听CI。到本章停止扩展，第13章streams.md保持原状。
+
+## 第二轮逐章交付完成（2026-10-23）
+
+第7—12章均按Luna逐章翻译→Sol实质补全/源码验证→该章独立提交并上传→下一章执行。原有实质提纲均补成解释、用法、错误边界与示例，不以删除标记代替补写。第10章上传后根据父代理复核另追加Waker/重复轮询契约措辞修正，保留原提交历史。
+
+独立验证crate由29测试增至61测试（新增32个），六章分别运行新增6/4/5/4/7/6个测试全部通过。新增依赖均写入独立crate锁文件，未改变上游旧示例工作区；最终全量旧工作区和61测试由主代理在本轮结束后统一复核并记录。平台专用工具、Unix代码、实验AsyncDrop及真实信号端到端验证边界见对应章节，不计入本机运行通过。未查询、监听或等待CI。

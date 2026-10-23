@@ -20,7 +20,7 @@
 - [析构与清理](part-guide/dtors.md)
 - [Future 详解](part-guide/futures.md)
 - [运行时及其使用边界](part-guide/runtimes.md)
-- [Timers and signal handling](part-guide/timers-signals.md)
+- [定时器与信号处理](part-guide/timers-signals.md)
 - [Async iterators (streams)](part-guide/streams.md)
 
 # Part 2: reference
