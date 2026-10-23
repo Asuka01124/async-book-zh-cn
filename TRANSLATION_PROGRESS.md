@@ -159,3 +159,8 @@
 - 新增安全Rust共享源码implementing.rs，正文include真实锚点，4个行为测试通过：真实Pending后由辅助线程发送并唤醒最新Waker；完成先于注册/发送端关闭；取消注销后拒绝迟到发送并返还值；含!Unpin Future的Stream保留Pending状态并融合。累计69测试，本章仅过滤执行新增4个；无新依赖。
 - 实际打开标准库Future/Pin、futures AtomicWaker/Stream/FusedStream及pin-project-lite官方文档。投影宏未新增依赖或运行，线程测试不宣称穷举所有交错；没有内核IO验证。
 - Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-14`、前14章HTML/链接/锚点/未完成标记及git diff --check通过。不监听CI。
+### 第 14 章追加校审：Waker 回调的锁边界
+
+- 父代理指出Waker的clone/drop也可能有自定义回调。已将Receiver的新Waker克隆放到锁外，旧Waker经replace/take移出，在释放Mutex后销毁，正文补充此约束。
+- 新增确定性Wake::Drop探针，用try_lock验证替换旧注册与取消注销时锁已释放；14章5测试通过，累计70。没有通过真的制造死锁进行验证。
+- 重建原输出目录遇OneDrive拒绝删除旧目录，改用`.tools/round3-chapter-14-review`成功构建；前14章检查、fmt/diff检查通过。独立追加提交，不重写已推历史。

@@ -47,14 +47,19 @@ impl Future for Receiver {
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let this = self.get_mut(); // Arc、bool 均 Unpin，无固定字段投影。
         assert!(!this.done, "不能在完成后再次轮询 Receiver");
+        let new_waker = cx.waker().clone(); // clone/drop 回调也在锁外运行。
         let mut state = this.shared.lock().unwrap();
         let result = if let Some(value) = state.value.take() { Ok(value) }
             else if !state.sender_alive { Err(Closed) }
             else {
-                state.waker = Some(cx.waker().clone());
+                let old = state.waker.replace(new_waker);
+                drop(state);
+                drop(old);
                 return Poll::Pending;
             };
-        state.waker = None;
+        let old = state.waker.take();
+        drop(state);
+        drop(old);
         this.done = true;
         Poll::Ready(result)
     }
@@ -63,7 +68,9 @@ impl Drop for Receiver {
     fn drop(&mut self) {
         let mut state = self.shared.lock().unwrap();
         state.receiver_alive = false;
-        state.waker = None;
+        let old = state.waker.take();
+        drop(state);
+        drop(old);
     }
 }
 // ANCHOR_END: oneshot
@@ -100,6 +107,28 @@ mod tests {
     impl Wake for Count {
         fn wake(self: Arc<Self>) { self.0.fetch_add(1, Ordering::SeqCst); }
         fn wake_by_ref(self: &Arc<Self>) { self.0.fetch_add(1, Ordering::SeqCst); }
+    }
+    #[test]
+    fn implementing_waker_drop_runs_outside_lock() {
+        struct Probe { shared: Arc<Mutex<State>>, unlocked: Arc<AtomicUsize> }
+        impl Wake for Probe { fn wake(self: Arc<Self>) {} }
+        impl Drop for Probe {
+            fn drop(&mut self) {
+                if self.shared.try_lock().is_ok() {
+                    self.unlocked.fetch_add(1, Ordering::SeqCst);
+                }
+            }
+        }
+        let (_tx, mut rx) = channel();
+        let unlocked = Arc::new(AtomicUsize::new(0));
+        for _ in 0..2 {
+            let w = Waker::from(Arc::new(Probe { shared: rx.shared.clone(), unlocked: unlocked.clone() }));
+            assert!(Pin::new(&mut rx).poll(&mut Context::from_waker(&w)).is_pending());
+            drop(w); // 注册中的副本现在是该 Probe 唯一的 Waker。
+        }
+        assert_eq!(unlocked.load(Ordering::SeqCst), 1); // 替换旧注册。
+        drop(rx);
+        assert_eq!(unlocked.load(Ordering::SeqCst), 2); // 取消注销。
     }
     #[test]
     fn implementing_latest_waker_is_used_and_real_thread_wakes() {
