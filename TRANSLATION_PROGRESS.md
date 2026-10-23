@@ -178,3 +178,10 @@
 - 4测试通过：真实计时器与非Send任务；poll内wake保留；先真实Pending再跨线程wake且总共仅两次poll；取消任务、陈旧ID与已真实Pending注册的外部计时器关闭通知。累计77测试，本章仅新增4个过滤执行，无新依赖。
 - 实际打开标准库Wake/park/Condvar与mio Poll官方文档。Windows运行教学执行器与时间driver；未实现或运行网络内核driver、多线程窃取/IOCP/io_uring。
 - Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-16`、前16章HTML/链接/锚点/未完成标记与git diff --check通过。不监听CI。
+## 第三轮（2026-10-24）：第 17 章，同步中的异步，异步中的同步
+
+- 上游只有目录标题，Luna翻译标题，Sol原创完整中文正文，新增sync-async.md并接通目录。涵盖同步Runtime拥有/root/current-thread驱动与Handle边界、专用运行时线程、双向通道/背压/关闭死锁、spawn_blocking/许可真实生命周期、长期线程、Rayon结果通道、block_in_place及join分支限制。
+- 新增bridging.rs，正文include服务、阻塞限流与Rayon源码。5测试Windows实际通过：专用线程服务同步/异步调用并关闭；已开始阻塞工作在外层abort后仍占许可；Rayon异步回复；满通道/跨线程发送关闭与排空；多线程block_in_place重入等待计时器。累计82测试，本章过滤新增5个。
+- 新增rayon=1.12.0及5个锁包，离线缓存编译。实际打开Tokio bridging、Handle、block_in_place、spawn_blocking、mpsc Sender/Receiver、oneshot及Rayon ThreadPool官方资料。
+- 不宣称取消已开始阻塞工作或CPU计算；未使用真实数据库/GUI/外部服务，未制造不可恢复的死锁。
+- Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-17`、前17章HTML/链接/锚点/未完成标记与git diff --check通过。不监听CI。

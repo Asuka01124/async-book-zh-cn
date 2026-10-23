@@ -28,7 +28,7 @@
 - [实现 Future 与 Stream](part-reference/implementing-futures-streams.md)
 - [替代运行时](part-reference/alternate-runtimes.md)
 - [实现你自己的运行时](part-reference/implementing-runtime.md)
-- [async in sync, sync in async]()
+- [同步中的异步，异步中的同步](part-reference/sync-async.md)
 - [Async IO: readiness vs completion, and io_uring]()
 - [Design patterns]()
 - [Cancellation and cancellation safety](part-reference/cancellation.md) (cancellation safety)
