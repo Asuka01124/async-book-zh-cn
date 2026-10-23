@@ -17,7 +17,7 @@
 - [并发组合 Future](part-guide/concurrency-primitives.md)
 - [通道、锁与同步](part-guide/sync.md)
 - [异步编程工具](part-guide/tools.md)
-- [Destruction and clean-up](part-guide/dtors.md)
+- [析构与清理](part-guide/dtors.md)
 - [Futures](part-guide/futures.md)
 - [Runtimes](part-guide/runtimes.md)
 - [Timers and signal handling](part-guide/timers-signals.md)
