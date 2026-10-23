@@ -152,3 +152,10 @@
 - 新增共享源码streams.rs，正文include真实锚点。4测试通过：惰性/固定/融合、有序与无序缓冲及并发上限、动态组移除与发送关闭、竞争后接收状态保留；累计65个。本章只运行新增4个。
 - 实际打开futures Stream/StreamExt/FusedStream/unfold/Sink、Tokio StreamExt、StreamGroup、async-stream、标准库AsyncIterator、RFC2996与Unstable Book gen_blocks官方文档。2026-10-24 AsyncIterator仍nightly-only；第三方流宏未新增依赖/未实测，语言实验未运行。
 - Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-13`、前13章HTML/链接/锚点/未完成标记及git diff --check通过。没有监听CI。
+## 第三轮（2026-10-24）：第 14 章，实现 Future 与 Stream
+
+- 上游只含英文目录标题，没有英文正文。GPT-6 Luna翻译标题，GPT-6.1 Sol原创补写本章，新增implementing-futures-streams.md并接通目录。没有将新写正文归称为英文翻译。
+- 完整解释手写状态机、poll/Pending唤醒协议、丢唤醒竞态/检查注册原子区与AtomicWaker注册重查、最新Waker/锁外唤醒、Pin/Unpin/安全字段投影、保存跨poll状态、单项Stream与FusedStream、取消/关闭/迟到通知及测试边界。
+- 新增安全Rust共享源码implementing.rs，正文include真实锚点，4个行为测试通过：真实Pending后由辅助线程发送并唤醒最新Waker；完成先于注册/发送端关闭；取消注销后拒绝迟到发送并返还值；含!Unpin Future的Stream保留Pending状态并融合。累计69测试，本章仅过滤执行新增4个；无新依赖。
+- 实际打开标准库Future/Pin、futures AtomicWaker/Stream/FusedStream及pin-project-lite官方文档。投影宏未新增依赖或运行，线程测试不宣称穷举所有交错；没有内核IO验证。
+- Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-14`、前14章HTML/链接/锚点/未完成标记及git diff --check通过。不监听CI。
