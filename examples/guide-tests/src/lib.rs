@@ -4,3 +4,4 @@ pub mod more;
 pub mod io;
 pub mod composition;
 pub mod sync;
+pub mod tools;
