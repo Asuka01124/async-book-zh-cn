@@ -27,7 +27,7 @@
 
 - [实现 Future 与 Stream](part-reference/implementing-futures-streams.md)
 - [替代运行时](part-reference/alternate-runtimes.md)
-- [Implementing your own runtime]()
+- [实现你自己的运行时](part-reference/implementing-runtime.md)
 - [async in sync, sync in async]()
 - [Async IO: readiness vs completion, and io_uring]()
 - [Design patterns]()

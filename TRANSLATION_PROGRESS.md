@@ -171,3 +171,10 @@
 - 新增smol =2.0.2，离线缓存依赖可用，锁文件新增22包。新增alternate.rs并include，3测试在Windows通过：LocalExecutor非Send任务与真实计时器；真实Pending任务丢句柄取消后析构；同一独立Future由smol与futures执行器分别驱动。累计73测试，本章过滤新增3个。
 - 没有运行Glommio/Monoio/tokio-uring/Embassy，也没有运行适配器或网络性能基准；Linux/macOS/嵌入式边界正文明确。
 - Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-15`、前15章HTML/链接/锚点/未完成标记与git diff --check通过。不监听CI。
+## 第三轮（2026-10-24）：第 16 章，实现你自己的运行时
+
+- 上游只有目录标题，Luna翻译标题，Sol原创完整中文正文，新增implementing-runtime.md并接通目录。覆盖任务表/就绪队列/安全Wake/Pin、跨线程通知、Condvar检查等待协议、时间driver、取消/关闭/迟到通知以及生产IO/公平/工作窃取/panic隔离的差距。
+- 新增纯安全Rust mini_runtime.rs并在正文include：当前线程支持非Send任务，Weak队列Waker，任务ID不复用，空闲Condvar等待，最近期限wait_timeout，Weak计时登记与锁外通知，显式cancel/shutdown，关闭后外部Sleep返回TimerClosed。没有busy-poll或每个计时器一个线程；没有伪称生产I/O runtime。
+- 4测试通过：真实计时器与非Send任务；poll内wake保留；先真实Pending再跨线程wake且总共仅两次poll；取消任务、陈旧ID与已真实Pending注册的外部计时器关闭通知。累计77测试，本章仅新增4个过滤执行，无新依赖。
+- 实际打开标准库Wake/park/Condvar与mio Poll官方文档。Windows运行教学执行器与时间driver；未实现或运行网络内核driver、多线程窃取/IOCP/io_uring。
+- Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-16`、前16章HTML/链接/锚点/未完成标记与git diff --check通过。不监听CI。
