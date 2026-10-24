@@ -248,3 +248,10 @@
 - 明确模型Arc租约只模拟生命周期，不证明外库已排队回调/原始userdata/真实ABI；租约Drop先锁外释放自己的上下文Arc再归零通知，保证quiescence语义。普通Drop只注销，不伪称完成异步等待；模型无poisoning恢复或extern panic隔离，真实库需独立unsafe证明。
 - 实际打开Nomicon FFI异步回调/展开、Reference external blocks/布局/trait对象、标准库catch_unwind/Box into_raw及Tokio oneshot官方文档。没有编译C/C++、链接外部库、运行外部异常/非法跨ABI展开或声称集成验证。
 - Rust1.96，cargo test --offline --locked async_ffi_、cargo fmt --check、mdbook `.tools/round4-chapter-23-reviewed`、前23章加导言共24篇HTML/链接/锚点/未完成标记及git diff --check通过。不查询、监听或等待CI。
+## 第四轮（2026-10-25）：第 24 章，Rust 异步编程与其他语言的比较
+
+- 上游仅目录标题，Luna翻译标题，Sol原创comparing-languages.md并接通目录。实质比较Rust Future/独立Tokio任务、JS Promise/宿主事件循环、Python coroutine/Task、Go goroutine、C# Task的启动/执行/调度、取消/错误传播/任务所有权、资源清理与阻塞桥接，包含同一双请求业务场景的迁移检查，不只列表格。
+- 校正Rust async体惰性不涵盖参数求值/同步准备/已spawn句柄；JS race/all不取消落败操作；Python固定3.14文档并标TaskGroup3.11/eager factory3.12/create_task eager_start3.14；Go context非强制退出或join且抢占有版本平台边界；C#正常Task同步前缀/上下文/ConfigureAwait/合作token/WhenAll与DisposeAsync规则。
+- 实际打开ECMAScript/WHATWG规范、Mozilla async function、Node事件循环/worker_threads、Python3.14 asyncio任务/开发/free-threading、Go FAQ/spec/1.14runtime/context、Microsoft TAP/场景/取消/异步返回/WhenAll/DisposeAsync/CTS Dispose及.NET ConfigureAwait FAQ官方资料。未把未运行的他语言行为或性能排名称为实测。
+- 本章是文档比较，复用既有已测Rust源码章节链接，没有新增无意义测试或依赖，也未安装运行其他语言。独立crate保持101测试，父代理已实际全量通过；旧工作区13测试同过，总114。
+- mdbook `.tools/round4-chapter-24-reviewed`、全部前24章加导言共25篇HTML/链接/锚点/未完成标记、git diff --check通过。正文与目录之外不扩展第25章rustc、structured/旧章节/navigation；不查询、监听或等待CI。

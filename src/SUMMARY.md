@@ -35,7 +35,7 @@
 - [饥饿](part-reference/starvation.md)
 - [固定（Pinning）](part-reference/pinning.md)
 - [异步与 FFI](part-reference/async-ffi.md)
-- [Comparing async programming in Rust to other languages]()
+- [Rust 异步编程与其他语言的比较](part-reference/comparing-languages.md)
 - [The implementation of async/await in rustc]()
 - [Structured concurrency](part-reference/structured.md)
 
