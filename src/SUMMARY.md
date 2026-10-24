@@ -32,7 +32,7 @@
 - [异步 I/O：就绪与完成，以及 io_uring](part-reference/io-models.md)
 - [设计模式](part-reference/design-patterns.md)
 - [取消与取消安全](part-reference/cancellation.md)
-- [Starvation]()
+- [饥饿](part-reference/starvation.md)
 - [Pinning](part-reference/pinning.md)
 - [Async and FFI]()
 - [Comparing async programming in Rust to other languages]()

@@ -227,3 +227,9 @@
 - 新增cancellation.rs并include。3个确定性测试通过：两个取消安全recv组合仍能丢first并改组；外部PairReader保留进度/EOF半帧返还；固定同一Future在临时借用竞争失败后继续。累计92测试，本章仅执行新增3个，无新依赖。
 - 实际打开标准库Future、Tokio select/JoinHandle abort/Mutex/AsyncReadExt、tokio-util CancellationToken与futures Abortable官方文档。令牌仅文档核查；旧章abort析构/超时join测试不重复计数，不宣称内核取消集成验证。
 - Rust1.96，cargo fmt --check、mdbook `.tools/round4-chapter-20`、前20章加导言共21篇HTML/链接/锚点/未完成标记及git diff --check通过。不查询、监听或等待CI。
+## 第四轮（2026-10-25）：第 21 章，饥饿
+
+- 上游只有英文目录标题，Luna翻译标题，Sol原创starvation.md并接通目录。解释合作式调度/一直Ready的await与无限poll、CPU阻塞、多线程边界、Tokio预算与yield_now非保证、biased分支、锁与许可公平/取消排位、控制通路及背压观测。
+- 新增starvation.rs并include预算Future。3个确定性有界测试通过：7次Ready await同poll完成；每poll两项/自唤醒/插入其他工作及溢出；biased前Ready分支令后分支5轮从未poll。累计95测试，本章仅执行新增3个，无新依赖。
+- 实际打开Tokio task/coop/yield_now/select/runtime公平性及Mutex/Semaphore官方文档。手动poll模型不宣称生产调度公平性或实时期限保证，没有无限挂死或墙钟脆弱测试。
+- Rust1.96，cargo fmt --check、mdbook `.tools/round4-chapter-21`、前21章加导言共22篇HTML/链接/锚点/未完成标记及git diff --check通过。不查询、监听或等待CI。
