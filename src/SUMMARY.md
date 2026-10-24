@@ -31,7 +31,7 @@
 - [同步中的异步，异步中的同步](part-reference/sync-async.md)
 - [异步 I/O：就绪与完成，以及 io_uring](part-reference/io-models.md)
 - [设计模式](part-reference/design-patterns.md)
-- [Cancellation and cancellation safety](part-reference/cancellation.md) (cancellation safety)
+- [取消与取消安全](part-reference/cancellation.md)
 - [Starvation]()
 - [Pinning](part-reference/pinning.md)
 - [Async and FFI]()

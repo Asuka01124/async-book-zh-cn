@@ -221,3 +221,9 @@
 - 新增patterns.rs并在正文include。3个确定性行为测试通过：满队列真实Pending发送在关闭后返还命令且原队列排空/Sender仍持有；放弃响应不回滚状态；业务溢出保持状态且服务继续。累计89测试，本章只过滤新增3个，无新依赖。
 - 实际打开Tokio通道/共享状态/关闭指南、mpsc/Sender reserve与send、JoinSet、watch及futures StreamExt官方文档。计数器是内存状态模型，不宣称数据库持久性/外部连接集成/管线或连接池实测。
 - Rust1.96，cargo fmt --check、mdbook `.tools/round4-chapter-19`、前19章加导言共20篇HTML/链接/锚点/未完成标记及git diff --check通过。未查询、监听或等待CI。
+## 第四轮（2026-10-25）：第 20 章，取消与取消安全
+
+- Luna完整逐项翻译原英文提纲，Sol实质补齐全部主题：内外取消、线程/Future区别、drop与底层工作边界、poll交还才可销毁而非字面“任意await点”、abort/令牌与清理、Tokio局部定义/整体halt safety/复制思考实验、数据丢失与状态拆分、恢复及select循环。
+- 新增cancellation.rs并include。3个确定性测试通过：两个取消安全recv组合仍能丢first并改组；外部PairReader保留进度/EOF半帧返还；固定同一Future在临时借用竞争失败后继续。累计92测试，本章仅执行新增3个，无新依赖。
+- 实际打开标准库Future、Tokio select/JoinHandle abort/Mutex/AsyncReadExt、tokio-util CancellationToken与futures Abortable官方文档。令牌仅文档核查；旧章abort析构/超时join测试不重复计数，不宣称内核取消集成验证。
+- Rust1.96，cargo fmt --check、mdbook `.tools/round4-chapter-20`、前20章加导言共21篇HTML/链接/锚点/未完成标记及git diff --check通过。不查询、监听或等待CI。
