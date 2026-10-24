@@ -241,3 +241,10 @@
 - 实际打开标准库Pin/pin模块/Unpin/pin宏/Rc/Arc/forget、pin-project及lite、pin-utils/futures pin_mut、RFC2349及原替代/扩展设计者博文，对照本机Rust1.96源码核实版本。历史提案不当成稳定API，未运行unsafe破坏示例/Miri或声称测试证明任意unsafe抽象健全。
 - Rust1.96，cargo test --offline --locked pinning_、cargo fmt --check、mdbook `.tools/round4-chapter-22-final`、前22章加导言共23篇HTML/链接/锚点/未完成标记、原锚点外链脚注保留比对及git diff --check通过。不查询、监听或等待CI。
 - 父代理全文校审后，限定普通用户结构体假想self关系与编译器async内部借用的区别，修自然译词；最终新目录`.tools/round4-chapter-22-accepted`构建无HTML警告，23篇检查与21旧id/46旧外链/5脚注保留比对通过。源码未改，不重复运行3测试。
+## 第四轮（2026-10-25）：第 23 章，异步与 FFI
+
+- 上游只有目录标题，Luna译标题，Sol原创async-ffi.md并接通目录。覆盖阻塞调用/回调/宿主Rust服务/外部事件循环、C ABI不承诺Future/trait布局、opaque句柄与输入结果所有权、上下文地址/回调并发/线程亲和、取消请求与注销和在途确认、显式shutdown/Drop保活、错误/重入/禁止不兼容unwind以及运行时和动态库卸载顺序。
+- 新增async_ffi.rs并include安全Rust注册模型，无裸指针/extern实库。3测试通过：辅助线程回调结果；丢等待者后取消仍可有回调、注销拒新、辅助线程释放在途租约后shutdown确认Weak上下文已释放；错误码与重复完成只交付一次。累计101测试，本章仅新增3，无新依赖。
+- 明确模型Arc租约只模拟生命周期，不证明外库已排队回调/原始userdata/真实ABI；租约Drop先锁外释放自己的上下文Arc再归零通知，保证quiescence语义。普通Drop只注销，不伪称完成异步等待；模型无poisoning恢复或extern panic隔离，真实库需独立unsafe证明。
+- 实际打开Nomicon FFI异步回调/展开、Reference external blocks/布局/trait对象、标准库catch_unwind/Box into_raw及Tokio oneshot官方文档。没有编译C/C++、链接外部库、运行外部异常/非法跨ABI展开或声称集成验证。
+- Rust1.96，cargo test --offline --locked async_ffi_、cargo fmt --check、mdbook `.tools/round4-chapter-23-reviewed`、前23章加导言共24篇HTML/链接/锚点/未完成标记及git diff --check通过。不查询、监听或等待CI。

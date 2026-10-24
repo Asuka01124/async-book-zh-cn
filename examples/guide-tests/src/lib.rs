@@ -19,3 +19,4 @@ pub mod patterns;
 pub mod cancellation;
 pub mod starvation;
 pub mod pinning;
+pub mod async_ffi;

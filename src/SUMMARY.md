@@ -34,7 +34,7 @@
 - [取消与取消安全](part-reference/cancellation.md)
 - [饥饿](part-reference/starvation.md)
 - [固定（Pinning）](part-reference/pinning.md)
-- [Async and FFI]()
+- [异步与 FFI](part-reference/async-ffi.md)
 - [Comparing async programming in Rust to other languages]()
 - [The implementation of async/await in rustc]()
 - [Structured concurrency](part-reference/structured.md)
