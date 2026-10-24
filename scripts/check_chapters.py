@@ -24,6 +24,12 @@ CHAPTERS = (
     "part-reference/implementing-runtime.md",
     "part-reference/sync-async.md",
     "part-reference/io-models.md",
+    "part-reference/design-patterns.md",
+    "part-reference/cancellation.md",
+    "part-reference/starvation.md",
+    "part-reference/pinning.md",
+    "part-reference/async-ffi.md",
+    "part-reference/comparing-languages.md",
 )
 
 
