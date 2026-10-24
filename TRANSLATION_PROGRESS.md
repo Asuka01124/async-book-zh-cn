@@ -215,3 +215,9 @@
 - 正文明确累计read_until_eof取消会丢弃已读out，不承诺整函数无损重试；内存模型不是IOCP/io_uring封装，不含完整driver关闭/错误通路。Linux epoll/io_uring、BSD/macOS kqueue、原生Windows IOCP/CancelIoEx与Tokio实验文件driver均未编译运行，文档/源码核查不计作内核验证。
 - 实际打开epoll/Linux io_uring/liburing取消及multishot手册、FreeBSD kqueue、Microsoft IOCP/ReadFile/CancelIoEx、Mio Poll/AFD源码、Tokio TcpStream/fs/Builder及tokio-uring IoBuf/IoBufMut官方资料。
 - Rust1.96，cargo fmt --check、mdbook `.tools/round3-chapter-18-final`、全部前18章HTML/链接/锚点/未完成标记及git diff --check通过。不查询或监听CI；本轮到18章停止，Design patterns及后续未修改。
+## 第四轮（2026-10-25）：第 19 章，设计模式
+
+- 上游只有英文目录标题，Luna翻译标题，Sol原创完整中文正文并接通design-patterns.md。覆盖单一资源所有者/请求响应、排队与执行/字节背压、响应不确定性与幂等、分开关闭通道/排空/错误退出、有限并发与监督、管线/重排/连接池、锁与通知语义。
+- 新增patterns.rs并在正文include。3个确定性行为测试通过：满队列真实Pending发送在关闭后返还命令且原队列排空/Sender仍持有；放弃响应不回滚状态；业务溢出保持状态且服务继续。累计89测试，本章只过滤新增3个，无新依赖。
+- 实际打开Tokio通道/共享状态/关闭指南、mpsc/Sender reserve与send、JoinSet、watch及futures StreamExt官方文档。计数器是内存状态模型，不宣称数据库持久性/外部连接集成/管线或连接池实测。
+- Rust1.96，cargo fmt --check、mdbook `.tools/round4-chapter-19`、前19章加导言共20篇HTML/链接/锚点/未完成标记及git diff --check通过。未查询、监听或等待CI。

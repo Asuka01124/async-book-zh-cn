@@ -30,7 +30,7 @@
 - [实现你自己的运行时](part-reference/implementing-runtime.md)
 - [同步中的异步，异步中的同步](part-reference/sync-async.md)
 - [异步 I/O：就绪与完成，以及 io_uring](part-reference/io-models.md)
-- [Design patterns]()
+- [设计模式](part-reference/design-patterns.md)
 - [Cancellation and cancellation safety](part-reference/cancellation.md) (cancellation safety)
 - [Starvation]()
 - [Pinning](part-reference/pinning.md)
