@@ -11,6 +11,7 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 CHAPTERS = (
+    "intro.md",
     "part-guide/intro.md", "part-guide/concurrency.md",
     "part-guide/async-await.md", "part-guide/more-async-await.md",
     "part-guide/io.md", "part-guide/concurrency-primitives.md",

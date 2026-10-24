@@ -1,6 +1,6 @@
 # Table of Contents
 
-[Introduction](intro.md)
+[导言](intro.md)
 
 - [Navigation](navigation/intro.md)
   - [By topic](navigation/topics.md)

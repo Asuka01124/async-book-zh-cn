@@ -1,6 +1,15 @@
 # 翻译与补全进度
 
-已完成新版指南全部 13 章和参考篇前五章，累计 18 项：第一轮第 1—6 章（2026-10-22），第二轮第 7—12 章（2026-10-23），第三轮为指南第 13 章及参考篇前五章（2026-10-24）。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。参考篇这五项上游只有目录标题，Luna 翻译标题，Sol 原创补写正文。上游基线：`840327a`。各章逐章翻译、校审、验证、提交并推送后，再开始下一章。书前导言、参考篇其余部分及旧版章节暂保留上游内容；各轮日期与结果保留为历史证据。
+已完成新版指南全部 13 章、参考篇前五章及书前导言，累计 19 篇：第一轮第 1—6 章（2026-10-22），第二轮第 7—12 章（2026-10-23），第三轮为指南第 13 章及参考篇前五章（2026-10-24），同日按用户截图追加翻译书前导言。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。参考篇这五项上游只有目录标题，Luna 翻译标题，Sol 原创补写正文。上游基线：`840327a`。各章逐章翻译、校审、验证、提交并推送后，再开始下一章。参考篇其余部分及旧版章节暂保留上游内容；各轮日期与结果保留为历史证据。
+
+## 按指定章节补译：书前导言（2026-10-24）
+
+- 用户截图指向 `src/intro.md` 的 Introduction 及三个小节；本次完整翻译为“导言”“什么是异步编程，为什么使用它？”“你好，世界！”和“Rust 异步功能的发展”，同步 SUMMARY，保留四个原英文显式锚点、示例 include 和脚注。
+- GPT-6 Luna 完成翻译，GPT-6.1 Sol 技术校审：修正 `.await`/Pending、惰性 Future/轮询、用户态任务调度与操作系统的关系、性能和取消的表述；更新 trait async fn 稳定状态、AsyncIterator/AsyncDrop 实验状态，并区分上游重写说明与中文版进度。两个脚注 TODO 链接接入已完成的 I/O 章。
+- 实际核查 Rust Reference await、Future、AsyncIterator、AsyncDrop、Rust 1.75 异步 trait 公告、Tokio task，以及保留的 Async Working Group 路线图和项目目标，正文附相关官方链接。
+- mdBook 0.5.4：`mdbook build --dest-dir .tools/intro-zh-final-book` 成功；`python scripts/check_chapters.py --output .tools/intro-zh-final-book` 默认检查全部 19 篇通过。另核对生成 HTML 的中文标题、四个旧英文锚点及实际展开的示例。
+- 用户已有 Rust 1.96.0：`cargo +1.96.0 run --offline --locked --manifest-path examples/hello-world/Cargo.toml --target-dir target` 成功，输出 `hello, world!`。未更改示例、依赖或新增测试；先前 99 项测试结果保留为第三轮历史证据，本次没有将其记作重新执行。
+- `git diff --check` 通过。本次书籍源码只修改书前导言和 SUMMARY；不查询、监听或等待 CI。
 
 ## 第三轮最终本地复核（2026-10-24）
 
