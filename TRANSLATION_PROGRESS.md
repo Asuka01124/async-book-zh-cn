@@ -233,3 +233,11 @@
 - 新增starvation.rs并include预算Future。3个确定性有界测试通过：7次Ready await同poll完成；每poll两项/自唤醒/插入其他工作及溢出；biased前Ready分支令后分支5轮从未poll。累计95测试，本章仅执行新增3个，无新依赖。
 - 实际打开Tokio task/coop/yield_now/select/runtime公平性及Mutex/Semaphore官方文档。手动poll模型不宣称生产调度公平性或实时期限保证，没有无限挂死或墙钟脆弱测试。
 - Rust1.96，cargo fmt --check、mdbook `.tools/round4-chapter-21`、前21章加导言共22篇HTML/链接/锚点/未完成标记及git diff --check通过。不查询、监听或等待CI。
+## 第四轮（2026-10-25）：第 22 章，固定（Pinning）
+
+- Luna完整逐段翻译原长章，Sol核查并技术校订，未摘要删节。原21标题id、46处外链（含重复）、5脚注及全部替代/扩展提案与参考保留，所有未完成项补齐，异步状态机说明连既有章节并给合法例子；假想self生命周期/不完整类型及Drop示意明确ignore。
+- 校正Unpin豁免与Copy区别、!Unpin不必然地址敏感且固定前可移动、NLL后续引用使用、移动非物理擦除、句柄与所指对象、Pin<&T>契约、局部pin值而非普通引用、Rc/Arc安全pin、static_ref/static_mut自1.61与const自1.84、packed/Vec/结构字段/Unpin/Drop边界、set原址先析构与原始复制风险、forget不保证析构。futures pin_mut按官方文档准确写为软弃用，区别pin-utils整包弃用。
+- 新增pinning.rs并include投影源码，3测试通过：Box句柄移动后!Unpin所指值Pending/恢复/Drop同址；Pin::set原址先drop旧值再poll/drop新值；pin-project-lite结构投影真实非Unpin Future跨Pending自借用并计poll。累计98，本章仅新增3；已有锁包pin-project-lite0.2.17提升直接依赖，不新增包版本。
+- 实际打开标准库Pin/pin模块/Unpin/pin宏/Rc/Arc/forget、pin-project及lite、pin-utils/futures pin_mut、RFC2349及原替代/扩展设计者博文，对照本机Rust1.96源码核实版本。历史提案不当成稳定API，未运行unsafe破坏示例/Miri或声称测试证明任意unsafe抽象健全。
+- Rust1.96，cargo test --offline --locked pinning_、cargo fmt --check、mdbook `.tools/round4-chapter-22-final`、前22章加导言共23篇HTML/链接/锚点/未完成标记、原锚点外链脚注保留比对及git diff --check通过。不查询、监听或等待CI。
+- 父代理全文校审后，限定普通用户结构体假想self关系与编译器async内部借用的区别，修自然译词；最终新目录`.tools/round4-chapter-22-accepted`构建无HTML警告，23篇检查与21旧id/46旧外链/5脚注保留比对通过。源码未改，不重复运行3测试。

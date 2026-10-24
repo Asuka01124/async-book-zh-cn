@@ -15,6 +15,7 @@ tracing = "0.1"
 futures-concurrency = "7.7.1"
 smol = "=2.0.2"
 rayon = "=1.12.0"
+pin-project-lite = "=0.2.17"
 
 [dev-dependencies]
 tracing-subscriber = { version = "0.3", default-features = false, features = ["registry"] }

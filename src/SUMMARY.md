@@ -33,7 +33,7 @@
 - [设计模式](part-reference/design-patterns.md)
 - [取消与取消安全](part-reference/cancellation.md)
 - [饥饿](part-reference/starvation.md)
-- [Pinning](part-reference/pinning.md)
+- [固定（Pinning）](part-reference/pinning.md)
 - [Async and FFI]()
 - [Comparing async programming in Rust to other languages]()
 - [The implementation of async/await in rustc]()
