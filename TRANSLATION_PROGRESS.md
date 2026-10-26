@@ -277,3 +277,11 @@
 - 使用既有稳定Rust1.96.0在Windows实际执行`rustc --emit=mir`，观察匿名Future、Pin/Context参数、discriminant/switchInt、状态3/4与Ready完成。产物在.tools，不将编号/字段作为稳定ABI；没有nightly、-Z、RUSTC_BOOTSTRAP、工具链安装或编译rustc本身。
 - 实际打开Reference函数/await/async块、RFC2394、rustc-dev-guide MIR construction/coroutine-closures、Future/Pin和官方rustc await降低及coroutine转换源码。在线编译器文档对应1.99.1，明确区别于本机1.96.0实测，不宣称所有版本/平台/优化及panic展开组合已测。
 - cargo fmt --check、mdbook `.tools/round5-chapter-25`、前25章加导言共26篇HTML/链接/锚点/未完成标记及git diff --check通过。不查询、监听或等待CI。
+
+## 第五轮（2026-10-26）：第 26 章，结构化并发
+
+- GPT-6 Luna完整逐段翻译原153行长章，GPT-6.1 Sol技术校订并实质补全全部未完成项：正式导读/任务树图、所有权/借用与资源推理、顶层边界价值、有限任务监督者案例、三个crate、作用域任务困难。保留原12标题HTML锚点、10处旧外链及3脚注，未以摘要替代正文。
+- 校正Rust并非只能无结构（thread::scope）、取消非瞬间/外部工作不自动结束、Drop可同步发信号但不能await、select与协作取消可配合、JoinSet drop仅请求abort、panic/业务Result两层、守卫/独立任务及父Future强制取消的保证边界；解释mem::forget与借用安全责任，AsyncDrop仍nightly。
+- 新增共享structured.rs与正文include，2个确定性测试通过：显式关闭等待异步清理许可与真实退出；业务错误和子任务panic分别让兄弟收到停止，但在清理许可前监督者仍Pending且资源仍在用，之后确认析构与退出。累计105，本章只过滤新增2测试，无新依赖。测试中预期子任务panic由JoinError捕获，测试总体成功。
+- 案例仅一次spawn有限Vec任务、仅返回首个错误，不是网络/持久化服务；supervise自身外部drop/abort时JoinSet与同步守卫不保证子任务异步清理。moro0.4/async-nursery0.6仅核查官方仓库/API未安装运行，futures-concurrency复用既有示例；未对实验AsyncDrop或任意scoped实现安全性作实测承诺。
+- 实际打开Tokio JoinSet/JoinHandle/select、标准库scope/forget/AsyncDrop、Trio nursery和moro/async-nursery/futures-concurrency官方资料。cargo fmt --check、mdbook `.tools/round5-chapter-26`、前26章加导言共27篇HTML/链接/锚点/未完成标记、旧锚点外链脚注保留比对与git diff --check通过。不查询、监听或等待CI。
