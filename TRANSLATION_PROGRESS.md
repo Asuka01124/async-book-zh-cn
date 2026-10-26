@@ -306,3 +306,11 @@
 - 修正同步函数可调用asyncfn构造Future但不能直接await、桥接生命周期/嵌套block_on、标准Future协议不等于运行时服务兼容、Tokio依赖不意味着每API需runtime（sync原语及_timeout例外）、futures/Tokio IO trait和旧0.1协议适配，避免选定runtime后无需再检查的旧说法。
 - 实际打开Rust官方1.75发布文章/Reference dyn规则、Future/AsyncIterator/AsyncDrop、async-std官方README、futures/compat、Tokio runtime/sync/spawn/LocalSet/bridging与smol LocalExecutor资料。本章纯文档无新增测试/依赖，独立crate仍105；未运行性能或实时性基准。
 - mdbook `.tools/round5-chapter-29`、前29章加导言共30篇HTML/链接/锚点/未完成标记、旧锚点外链保留比对与git diff --check通过。不查询、监听或等待CI。
+
+## 第五轮（2026-10-26）：第 30 章，async/.await 入门
+
+- GPT-6 Luna完整翻译旧Primer正文和所引旧源码英文注释，GPT-6.1 Sol校订并补充共享Pending事件示例；原唯一标题id及4个include保留，Cargo行9:10仍准确指向dependencies/futures。
+- 解释async不自动消除同步阻塞、根执行器与子Future、IntoFuture转换、子Future真正Pending才交还控制、join同任务并发非独立spawn/多核并行；保留外部逐次block_on示例，修正内部嵌套当前futures executor会被enter检查拒绝并panic的原错误，核对官方与本机0.3.34源码，不制造死锁。
+- 旧examples/01_04_async_await_primer/src/lib.rs注释已完整中文并明示learn/sing/dance立即Ready桩不提供交错证据；旧3测试运行通过（原旧13中已有，不新增计数）。新增共享primer.rs复用第25章YieldOnce，1确定性测试检查两次真实Pending、学会才唱、跳舞在学习/唱歌等待中推进及最后完成。累计106独立测试，本章仅过滤新增1，无新依赖。
+- 实际打开Reference await、IntoFuture、futures block_on/join和futures-executor local_pool官方源码；新例为手动poll/无操作Waker的确定性无IO演示，不宣称音乐/动画/真实计时/网络/性能基准或一般执行器调度次序。
+- Rust1.96，旧包cargo test --offline --locked -p、旧包及独立crate cargo fmt --check、mdbook `.tools/round5-chapter-30`、前30章加导言共31篇HTML/链接/锚点/未完成标记、旧锚点/include保留比对与git diff --check通过。到本章停止，不修改02_execution/navigation及更后章节；不查询、监听或等待CI。
