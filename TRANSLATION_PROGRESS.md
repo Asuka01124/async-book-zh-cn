@@ -298,3 +298,11 @@
 - 校正线程池/性能数量级绝对化、协程与async/actor/事件驱动层次并非互斥、Future惰性与参数/独立任务边界、drop不回滚外部工作、零成本非整体零分配、运行时线程/配置及二进制体积非必然增大；补官方依据。
 - 旧examples/01_02_why_async/src/lib.rs只翻译注释/panic提示并把两下载桩明确标为历史占位，不发网络请求、无真实Pending，原2测试实际通过但仅证明控制结构编译运行，不算网络下载/并发吞吐实测；未访问foo.com/bar.com。无需新增重复测试，独立crate保持105，旧工作区仍原13。
 - 实际打开std::thread/Future、Reference async函数/块、Tokio runtime/async教程及futures join/block_on官方资料。Rust1.96下该例cargo test --offline --locked -p通过，指定包cargo fmt --check、mdbook `.tools/round5-chapter-28`、前28章加导言共29篇HTML/链接/锚点/未完成标记、旧锚点链接include比对和git diff --check通过。不查询、监听或等待CI。
+
+## 第五轮（2026-10-26）：第 29 章，异步 Rust 的现状
+
+- GPT-6 Luna完整翻译原各段/8节标题和列表，GPT-6.1 Sol技术校订；8旧标题id与原Future/futures外链、旧生态章节链接完整保留。性能/维护、语言与库、编译/运行时/新故障、兼容性、单线程与延迟场景均覆盖，不作性能排名保证。
+- 当前官方核查明确async trait自1.75稳定、静态与dyn分发/返回Future Send边界；AsyncIterator与AsyncDrop仍nightly-only（标feature/日期）；async-std README已宣布停止维护并建议smol。标准库在线1.99.1与本书本机1.96的区别注明，不安装实验工具链。
+- 修正同步函数可调用asyncfn构造Future但不能直接await、桥接生命周期/嵌套block_on、标准Future协议不等于运行时服务兼容、Tokio依赖不意味着每API需runtime（sync原语及_timeout例外）、futures/Tokio IO trait和旧0.1协议适配，避免选定runtime后无需再检查的旧说法。
+- 实际打开Rust官方1.75发布文章/Reference dyn规则、Future/AsyncIterator/AsyncDrop、async-std官方README、futures/compat、Tokio runtime/sync/spawn/LocalSet/bridging与smol LocalExecutor资料。本章纯文档无新增测试/依赖，独立crate仍105；未运行性能或实时性基准。
+- mdbook `.tools/round5-chapter-29`、前29章加导言共30篇HTML/链接/锚点/未完成标记、旧锚点外链保留比对与git diff --check通过。不查询、监听或等待CI。

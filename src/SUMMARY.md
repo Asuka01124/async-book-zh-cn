@@ -44,7 +44,7 @@
 
 - [入门](01_getting_started/01_chapter.md)
   - [为什么要用异步？](01_getting_started/02_why_async.md)
-  - [The State of Asynchronous Rust](01_getting_started/03_state_of_async_rust.md)
+  - [异步 Rust 的现状](01_getting_started/03_state_of_async_rust.md)
   - [`async`/`.await` Primer](01_getting_started/04_async_await_primer.md)
 - [Under the Hood: Executing `Future`s and Tasks](02_execution/01_chapter.md)
   - [The `Future` Trait](02_execution/02_future.md)
