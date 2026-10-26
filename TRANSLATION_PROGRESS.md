@@ -291,3 +291,10 @@
 - GPT-6 Luna完整翻译原欢迎与书籍目标、三个学习阶段和结束引导，GPT-6.1 Sol校审；保留getting-started/what-this-book-covers两个旧标题锚点并翻译目录。
 - 明示旧版入口并补新版指南/参考链接；实际打开当前Reference async函数与Future官方文档作为语言行为依据，不将旧版“及时全面”目标写成全部旧章均已更新的承诺。
 - 本章纯导读，不新增源码、依赖或无意义测试；独立crate保持105测试。mdbook `.tools/round5-chapter-27`、前27章加导言共28篇HTML/链接/锚点/未完成标记与git diff --check通过。不查询、监听或等待CI。
+
+## 第五轮（2026-10-26）：第 28 章，为什么要用异步？
+
+- GPT-6 Luna完整翻译原正文及旧例英文注释，GPT-6.1 Sol逐段校订；6旧标题id、原std::thread外链和两处源码include保留。并发模型、Rust实现差异、线程取舍、下载结构和混用模型全部覆盖。
+- 校正线程池/性能数量级绝对化、协程与async/actor/事件驱动层次并非互斥、Future惰性与参数/独立任务边界、drop不回滚外部工作、零成本非整体零分配、运行时线程/配置及二进制体积非必然增大；补官方依据。
+- 旧examples/01_02_why_async/src/lib.rs只翻译注释/panic提示并把两下载桩明确标为历史占位，不发网络请求、无真实Pending，原2测试实际通过但仅证明控制结构编译运行，不算网络下载/并发吞吐实测；未访问foo.com/bar.com。无需新增重复测试，独立crate保持105，旧工作区仍原13。
+- 实际打开std::thread/Future、Reference async函数/块、Tokio runtime/async教程及futures join/block_on官方资料。Rust1.96下该例cargo test --offline --locked -p通过，指定包cargo fmt --check、mdbook `.tools/round5-chapter-28`、前28章加导言共29篇HTML/链接/锚点/未完成标记、旧锚点链接include比对和git diff --check通过。不查询、监听或等待CI。

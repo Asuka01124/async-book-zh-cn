@@ -1,126 +1,67 @@
-# Why Async?
+<a id="why-async"></a>
+# 为什么要用异步？
 
-We all love how Rust empowers us to write fast, safe software.
-But how does asynchronous programming fit into this vision?
+本章保留旧版入门的完整主题与示例，由 GPT-6 Luna 翻译，GPT-6.1 Sol 校订性能、取消与示例边界。
 
-Asynchronous programming, or async for short, is a _concurrent programming model_
-supported by an increasing number of programming languages.
-It lets you run a large number of concurrent
-tasks on a small number of OS threads, while preserving much of the
-look and feel of ordinary synchronous programming, through the
-`async/await` syntax.
+我们都喜欢 Rust 让我们能够编写快速、安全的软件。那么，异步编程如何融入这一愿景呢？
 
-## Async vs other concurrency models
+异步编程（简称 async）是一种并发编程模型，越来越多的编程语言开始支持它。它让你能够在少量操作系统线程上运行大量并发任务，同时借助 `async/await` 语法，保留普通同步编程的大部分外观和体验。
 
-Concurrent programming is less mature and "standardized" than
-regular, sequential programming. As a result, we express concurrency
-differently depending on which concurrent programming model
-the language is supporting.
-A brief overview of the most popular concurrency models can help
-you understand how asynchronous programming fits within the broader
-field of concurrent programming:
+<a id="async-vs-other-concurrency-models"></a>
+## 异步与其他并发模型
 
-- **OS threads** don't require any changes to the programming model,
-  which makes it very easy to express concurrency. However, synchronizing
-  between threads can be difficult, and the performance overhead is large.
-  Thread pools can mitigate some of these costs, but not enough to support
-  massive IO-bound workloads.
-- **Event-driven programming**, in conjunction with _callbacks_, can be very
-  performant, but tends to result in a verbose, "non-linear" control flow.
-  Data flow and error propagation is often hard to follow.
-- **Coroutines**, like threads, don't require changes to the programming model,
-  which makes them easy to use. Like async, they can also support a large
-  number of tasks. However, they abstract away low-level details that
-  are important for systems programming and custom runtime implementors.
-- **The actor model** divides all concurrent computation into units called
-  actors, which communicate through fallible message passing, much like
-  in distributed systems. The actor model can be efficiently implemented, but it leaves
-  many practical issues unanswered, such as flow control and retry logic.
+与常规的顺序编程相比，并发编程的发展还不够成熟，也缺乏统一的“标准”。因此，语言支持不同并发编程模型时，表达并发的方式也各不相同。简要了解几种最流行的并发模型，有助于你理解异步编程在整个并发编程领域中的位置：
 
-In summary, asynchronous programming allows highly performant implementations
-that are suitable for low-level languages like Rust, while providing
-most of the ergonomic benefits of threads and coroutines.
+- **操作系统线程**可以沿用同步调用方式，因此容易从现有代码表达并发。不过，线程间同步可能很困难，为每个等待中的操作分配线程还会增加资源开销。线程池可以复用线程，但若所有工作线程都阻塞在 I/O 上，就限制了同一时刻可处理的操作数；它能否满足规模需求，取决于工作负载与实现。
+- **事件驱动编程**结合_回调_可以有很高的性能，但控制流往往冗长且“不线性”，数据流和错误传播也常常难以追踪。
+- **协程**可以保存执行进度并在稍后恢复；某些带独立栈的实现能够沿用接近同步的调用方式，也能支持大量任务。但不同协程的栈、调度与切换方式差别很大，某些实现会隐藏系统编程和自定义运行时需要关注的细节。Rust 的 async 本身也借助无独立调用栈的协程状态机实现，因此“协程”和“async”并不是互斥类别。
+- **Actor 模型**将所有并发计算划分为称为 actor 的单元；它们通过可能失败的消息传递进行通信，方式与分布式系统类似。Actor 模型可以高效实现，但仍有许多实际问题没有解决，例如流量控制和重试逻辑。
 
-## Async in Rust vs other languages
+异步编程让 Rust 这样的底层语言能够采用高效实现，同时借助顺序形式的 async/await 保留许多线程和协程在易用性方面的好处。这些模型还处在不同层次：事件循环可以为 async 提供 I/O 驱动，actor 可以由异步任务或线程实现；消息传递的背压与重试仍须单独设计。
 
-Although asynchronous programming is supported in many languages, some
-details vary across implementations. Rust's implementation of async
-differs from most languages in a few ways:
+<a id="async-in-rust-vs-other-languages"></a>
+## Rust 中的异步与其他语言中的异步
 
-- **Futures are inert** in Rust and make progress only when polled. Dropping a
-  future stops it from making further progress.
-- **Async is zero-cost** in Rust, which means that you only pay for what you use.
-  Specifically, you can use async without heap allocations and dynamic dispatch,
-  which is great for performance!
-  This also lets you use async in constrained environments, such as embedded systems.
-- **No built-in runtime** is provided by Rust. Instead, runtimes are provided by
-  community maintained crates.
-- **Both single- and multithreaded** runtimes are available in Rust, which have
-  different strengths and weaknesses.
+虽然许多语言都支持异步编程，但不同实现的一些细节有所差异。Rust 的 async 实现有几个方面不同于大多数语言：
 
-## Async vs threads in Rust
+- **Rust 的 async 函数体由轮询推进**，调用只创建 Future，参数表达式则先在调用处求值。丢弃拥有的 Future 会停止它自身后续的执行，但不会回滚已发生的副作用，也不保证它观察的独立任务或底层操作停止。并非每个返回 Future 的 API 都完全惰性；Future 也可能只是观察已运行工作的结果句柄。[标准库文档](https://doc.rust-lang.org/std/future/trait.Future.html#runtime-characteristics) 明确区分了这些情况。
+- **Rust 的 async 遵循零成本抽象的设计目标**：语法不要求为每次 async 调用进行堆分配，也不要求使用动态分发；匿名 Future 可以直接存储并静态分发。这有助于性能，也能用于嵌入式等资源受限环境。不过，状态机仍占存储，`Box`、任务调度、缓冲区和库实现都可能分配；“零成本”不意味着整个异步应用没有运行开销。
+- **Rust 不提供内置运行时**。运行时由社区维护的 crate 提供。
+- **Rust 生态提供单线程和多线程运行时**，它们各有优缺点。单线程也可以并发推进等待 I/O 的工作；多个 CPU 密集型任务要并行，通常还需要其他执行线程。
 
-The primary alternative to async in Rust is using OS threads, either
-directly through [`std::thread`](https://doc.rust-lang.org/std/thread/)
-or indirectly through a thread pool.
-Migrating from threads to async or vice versa
-typically requires major refactoring work, both in terms of implementation and
-(if you are building a library) any exposed public interfaces. As such,
-picking the model that suits your needs early can save a lot of development time.
+<a id="async-vs-threads-in-rust"></a>
+## Rust 中的异步与线程
 
-**OS threads** are suitable for a small number of tasks, since threads come with
-CPU and memory overhead. Spawning and switching between threads
-is quite expensive as even idle threads consume system resources.
-A thread pool library can help mitigate some of these costs, but not all.
-However, threads let you reuse existing synchronous code without significant
-code changes—no particular programming model is required.
-In some operating systems, you can also change the priority of a thread,
-which is useful for drivers and other latency sensitive applications.
+在 Rust 中，async 的主要替代方案是使用操作系统线程，可以直接使用 [`std::thread`](https://doc.rust-lang.org/std/thread/)，也可以间接通过线程池使用。在线程和 async 之间迁移通常需要大量重构，既要修改实现，也可能需要修改对外公开的接口（如果你正在构建库）。因此，尽早选择适合需求的模型，可以节省大量开发时间。
 
-**Async** provides significantly reduced CPU and memory
-overhead, especially for workloads with a
-large amount of IO-bound tasks, such as servers and databases.
-All else equal, you can have orders of magnitude more tasks than OS threads,
-because an async runtime uses a small amount of (expensive) threads to handle
-a large amount of (cheap) tasks.
-However, async Rust results in larger binary blobs due to the state
-machines generated from async functions and since each executable
-bundles an async runtime.
+**操作系统线程**常适合数量可控的工作、已有阻塞 API 或需要并行计算的场景。每个线程有自己的栈和系统管理状态；创建与切换线程存在成本，等待中的线程虽然不必持续消耗 CPU，仍占有部分资源。线程池能复用线程，却不能消除每个工作线程的所有成本。不过，线程可以让你在不大幅修改代码的情况下复用现有同步代码，无须先把整条调用链改成异步形式。在一些操作系统中，还能通过平台接口调整线程优先级，用于特定的延迟敏感场景；这不等于获得实时保证，也不是标准库 `std::thread` 提供的通用优先级 API。
 
-On a last note, asynchronous programming is not _better_ than threads,
-but different.
-If you don't need async for performance reasons, threads can often be
-the simpler alternative.
+**Async** 对大量时间花在等待 I/O 的工作负载，常能减少“每项操作一个线程”的资源开销，例如服务器和数据库中的大量连接。运行时可以用少量执行线程推进许多 Future，在合适场景中能容纳远多于操作系统线程的任务。但具体差距取决于每个 Future 的大小、缓冲区、调度、操作系统限制与负载，不能保证总有几个数量级的提升；对少量工作或 CPU 密集计算，也不保证比线程更快。
 
-### Example: Concurrent downloading
+异步状态机、泛型单态化以及链接进来的运行时可能增加二进制体积，但这取决于实际依赖、功能开关、优化与裁剪，并非每个 async 程序都必须打包一个完整运行时，最终文件也不必然比同步版本更大。[Reference](https://doc.rust-lang.org/reference/expressions/block-expr.html#async-blocks) 说明 async 生成匿名 Future；[Tokio 的运行时文档](https://docs.rs/tokio/latest/tokio/runtime/index.html) 说明具体调度器、I/O 与定时服务的配置。评估性能或体积时应对真实应用测量，本章没有给出性能基准。
 
-In this example our goal is to download two web pages concurrently.
-In a typical threaded application we need to spawn threads
-to achieve concurrency:
+最后要指出，异步编程并不_优于_线程，只是有所不同。如果出于性能原因并不需要 async，线程往往是更简单的替代方案。
+
+<a id="example-concurrent-downloading"></a>
+### 示例：并发下载
+
+在这个示例中，教学目标是比较“并发下载两个网页”的控制结构。仓库保留的 `download` 与 `download_async` 都是空占位函数，不会发出任何 HTTP 请求；字符串中的站点只作为示意参数，运行测试不会访问它们。多线程版本为两项工作各创建一个线程：
 
 ```rust,ignore
 {{#include ../../examples/01_02_why_async/src/lib.rs:get_two_sites}}
 ```
 
-However, downloading a web page is a small task; creating a thread
-for such a small amount of work is quite wasteful. For a larger application, it
-can easily become a bottleneck. In async Rust, we can run these tasks
-concurrently without extra threads:
+下载页面可能包含大量等待，也可能涉及昂贵处理，不能统一视作“很小的任务”。为少量请求临时创建线程可以足够简单；若请求量很大，为每次下载都创建线程则可能成为瓶颈。async Rust 可以在同一个任务中用 `join!` 并发推进两个 Future，而不必给每个 Future 新建线程：
 
 ```rust,ignore
 {{#include ../../examples/01_02_why_async/src/lib.rs:get_two_sites_async}}
 ```
 
-Here, no extra threads are created. Additionally, all function calls are statically
-dispatched, and there are no heap allocations!
-However, we need to write the code to be asynchronous in the first place,
-which this book will help you achieve.
+这里的 `join!` 本身不 spawn 任务，两个子 Future 在调用者任务中被轮询，既不要求动态分发，也不要求为每个子 Future 分配一个堆对象。这不能推出整个程序“没有额外线程、没有分配”：执行器、真实 HTTP 客户端和底层驱动可能各有资源需求。测试使用 [`futures::executor::block_on`](https://docs.rs/futures/latest/futures/executor/fn.block_on.html) 在当前线程驱动根 Future；换成真实 Tokio I/O 时还需要相应运行时服务。
 
-## Custom concurrency models in Rust
+[`join!`](https://docs.rs/futures/latest/futures/macro.join.html) 会等待两项都完成，不提供同时占用两个 CPU 核的保证。这两个空占位 async 函数都可以立即完成，所以现有测试只能确认示例控制结构能编译运行，不能证明实际下载、等待重叠或网络吞吐。若想观察真实的 `Pending`、交替推进和唤醒，可读新版[并发组合 Future](../part-guide/concurrency-primitives.md)中的共享验证示例。无论采用哪种客户端，首先都要使用真正非阻塞的异步 API；仅把同步下载包进 async 块，不会消除阻塞。本书后续将逐步介绍这些工具。
 
-On a last note, Rust doesn't force you to choose between threads and async.
-You can use both models within the same application, which can be
-useful when you have mixed threaded and async dependencies.
-In fact, you can even use a different concurrency model altogether,
-such as event-driven programming, as long as you find a library that
-implements it.
+<a id="custom-concurrency-models-in-rust"></a>
+## Rust 中的自定义并发模型
+
+最后，Rust 并不要求你在线程和 async 之间二选一。同一个应用中可以同时使用这两种模型；如果你依赖的组件中既有线程依赖，也有异步依赖，这会很有用。事实上，只要找到实现相应模型的库，你甚至可以采用完全不同的并发模型，例如事件驱动编程。
