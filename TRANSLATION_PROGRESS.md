@@ -285,3 +285,9 @@
 - 新增共享structured.rs与正文include，2个确定性测试通过：显式关闭等待异步清理许可与真实退出；业务错误和子任务panic分别让兄弟收到停止，但在清理许可前监督者仍Pending且资源仍在用，之后确认析构与退出。累计105，本章只过滤新增2测试，无新依赖。测试中预期子任务panic由JoinError捕获，测试总体成功。
 - 案例仅一次spawn有限Vec任务、仅返回首个错误，不是网络/持久化服务；supervise自身外部drop/abort时JoinSet与同步守卫不保证子任务异步清理。moro0.4/async-nursery0.6仅核查官方仓库/API未安装运行，futures-concurrency复用既有示例；未对实验AsyncDrop或任意scoped实现安全性作实测承诺。
 - 实际打开Tokio JoinSet/JoinHandle/select、标准库scope/forget/AsyncDrop、Trio nursery和moro/async-nursery/futures-concurrency官方资料。cargo fmt --check、mdbook `.tools/round5-chapter-26`、前26章加导言共27篇HTML/链接/锚点/未完成标记、旧锚点外链脚注保留比对与git diff --check通过。不查询、监听或等待CI。
+
+## 第五轮（2026-10-26）：第 27 章，入门（旧版总导读）
+
+- GPT-6 Luna完整翻译原欢迎与书籍目标、三个学习阶段和结束引导，GPT-6.1 Sol校审；保留getting-started/what-this-book-covers两个旧标题锚点并翻译目录。
+- 明示旧版入口并补新版指南/参考链接；实际打开当前Reference async函数与Future官方文档作为语言行为依据，不将旧版“及时全面”目标写成全部旧章均已更新的承诺。
+- 本章纯导读，不新增源码、依赖或无意义测试；独立crate保持105测试。mdbook `.tools/round5-chapter-27`、前27章加导言共28篇HTML/链接/锚点/未完成标记与git diff --check通过。不查询、监听或等待CI。

@@ -42,7 +42,7 @@
 
 # Old chapters
 
-- [Getting Started](01_getting_started/01_chapter.md)
+- [入门](01_getting_started/01_chapter.md)
   - [Why Async?](01_getting_started/02_why_async.md)
   - [The State of Asynchronous Rust](01_getting_started/03_state_of_async_rust.md)
   - [`async`/`.await` Primer](01_getting_started/04_async_await_primer.md)
