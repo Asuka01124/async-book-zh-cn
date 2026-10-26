@@ -269,3 +269,11 @@
 - 实际打开ECMAScript/WHATWG规范、Mozilla async function、Node事件循环/worker_threads、Python3.14 asyncio任务/开发/free-threading、Go FAQ/spec/1.14runtime/context、Microsoft TAP/场景/取消/异步返回/WhenAll/DisposeAsync/CTS Dispose及.NET ConfigureAwait FAQ官方资料。未把未运行的他语言行为或性能排名称为实测。
 - 本章是文档比较，复用既有已测Rust源码章节链接，没有新增无意义测试或依赖，也未安装运行其他语言。独立crate保持101测试，父代理已实际全量通过；旧工作区13测试同过，总114。
 - mdbook `.tools/round4-chapter-24-reviewed`、全部前24章加导言共25篇HTML/链接/锚点/未完成标记、git diff --check通过。正文与目录之外不扩展第25章rustc、structured/旧章节/navigation；不查询、监听或等待CI。
+
+## 第五轮（2026-10-26）：第 25 章，rustc 中 async/await 的实现
+
+- 上游只有英文目录标题，GPT-6 Luna翻译标题，GPT-6.1 Sol原创rustc-async-await.md并接通目录。区分语言规范与具体rustc实现，覆盖惰性/参数捕获、HIR opaque返回与协程/THIR/MIR、IntoFuture和Pending挂起、跨挂起保存与析构标志、状态依赖Drop、Pin自借用与Send、布局/优化非ABI保证及运行时职责。
+- 新增共享源码rustc_async.rs并include：真实自唤醒Pending、两阶段资源、跨挂起借用和挂起前结束Rc作用域。2测试通过：构造/未poll及两个挂起点/正常完成各路径资源释放与唤醒次数；内部借用恢复及scoped_rc的Send编译约束。累计103测试，本章只过滤新增2个，无新依赖。
+- 使用既有稳定Rust1.96.0在Windows实际执行`rustc --emit=mir`，观察匿名Future、Pin/Context参数、discriminant/switchInt、状态3/4与Ready完成。产物在.tools，不将编号/字段作为稳定ABI；没有nightly、-Z、RUSTC_BOOTSTRAP、工具链安装或编译rustc本身。
+- 实际打开Reference函数/await/async块、RFC2394、rustc-dev-guide MIR construction/coroutine-closures、Future/Pin和官方rustc await降低及coroutine转换源码。在线编译器文档对应1.99.1，明确区别于本机1.96.0实测，不宣称所有版本/平台/优化及panic展开组合已测。
+- cargo fmt --check、mdbook `.tools/round5-chapter-25`、前25章加导言共26篇HTML/链接/锚点/未完成标记及git diff --check通过。不查询、监听或等待CI。
