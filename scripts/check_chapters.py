@@ -30,6 +30,12 @@ CHAPTERS = (
     "part-reference/pinning.md",
     "part-reference/async-ffi.md",
     "part-reference/comparing-languages.md",
+    "part-reference/rustc-async-await.md",
+    "part-reference/structured.md",
+    "01_getting_started/01_chapter.md",
+    "01_getting_started/02_why_async.md",
+    "01_getting_started/03_state_of_async_rust.md",
+    "01_getting_started/04_async_await_primer.md",
 )
 
 

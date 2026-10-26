@@ -4,7 +4,7 @@
 
 ## 本轮范围与工作流
 
-已完成新版指南全部 13 章、参考篇前 11 章及[书前导言](src/intro.md)，累计 25 篇。第一轮（2026 年 10 月 22 日）完成第 1—6 章，第二轮（2026 年 10 月 23 日）完成第 7—12 章；第三轮（2026 年 10 月 24 日）完成指南最后一章和参考篇前五章，同日追加书前导言；第四轮（2026 年 10 月 25 日）完成参考篇接下来的六章。参考篇的 rustc 实现、结构化并发，以及旧版章节和其他导航内容仍保留上游内容。
+已完成新版指南全部 13 篇、参考篇全部 13 篇、旧版入门前四篇及[书前导言](src/intro.md)，累计 31 篇。第一、二轮（2026 年 10 月 22—23 日）完成指南前 12 篇；第三轮（10 月 24 日）完成指南最后一篇和参考篇前五篇，同日追加书前导言；第四轮（10 月 25 日）完成参考篇接下来的六篇；第五轮（10 月 26 日）完成参考篇最后两篇和旧版入门四篇。其余旧版章节和其他导航内容仍保留上游内容。
 
 | 章节 | 逐章验收提交 |
 | --- | --- |
@@ -54,11 +54,24 @@
 | [异步与 FFI](src/part-reference/async-ffi.md) | [d78c2d3](https://github.com/Asuka01124/async-book-zh-cn/commit/d78c2d39495cad50b93ddca2e8e15ea3639c85dd) |
 | [Rust 异步编程与其他语言的比较](src/part-reference/comparing-languages.md) | [90df556](https://github.com/Asuka01124/async-book-zh-cn/commit/90df556aa36cc245bdfd4bea96fe7f66bc86c669) |
 
-本轮的设计模式、饥饿、异步与 FFI、跨语言比较原本仅有空目录标题，Luna 翻译标题，Sol 原创补写正文；取消章按原提纲补全，Pinning 章完整翻译已有长文并技术校订。
+第四轮的设计模式、饥饿、异步与 FFI、跨语言比较原本仅有空目录标题，Luna 翻译标题，Sol 原创补写正文；取消章按原提纲补全，Pinning 章完整翻译已有长文并技术校订。
+
+第五轮（2026 年 10 月 26 日）已按目录页面顺序逐篇验收并独立提交上传以下六篇，书前导言仍单独计数：
+
+| 章节 | 逐章验收提交 |
+| --- | --- |
+| [rustc 中 async/await 的实现](src/part-reference/rustc-async-await.md) | [11ff7a9](https://github.com/Asuka01124/async-book-zh-cn/commit/11ff7a912bcec8dfc391b5148e046f039949537c) |
+| [结构化并发](src/part-reference/structured.md) | [b4dd105](https://github.com/Asuka01124/async-book-zh-cn/commit/b4dd10589b6b90d3f1eb49517755152cdbc10ee5) |
+| [旧版：入门](src/01_getting_started/01_chapter.md) | [abf3711](https://github.com/Asuka01124/async-book-zh-cn/commit/abf371186abde2844e0f27739db4deea729a6ed0) |
+| [旧版：为什么使用异步？](src/01_getting_started/02_why_async.md) | [1d09671](https://github.com/Asuka01124/async-book-zh-cn/commit/1d09671b304ef01add1567136ff2013ccca903b6) |
+| [旧版：Rust 异步编程的现状](src/01_getting_started/03_state_of_async_rust.md) | [3c719ba](https://github.com/Asuka01124/async-book-zh-cn/commit/3c719ba6e77fe6bcc53f1a82bf82141d33ba850c) |
+| [旧版：async/await 入门](src/01_getting_started/04_async_await_primer.md) | [056a256](https://github.com/Asuka01124/async-book-zh-cn/commit/056a256124d59b128a6bcfad0ae4e3e5f6a0fb2d) |
+
+rustc 实现条目原本仅有标题，Luna 翻译标题、Sol 原创正文；结构化并发和旧版页面完整翻译已有原文，并补齐提纲或校订过时表述。
 
 每章按顺序进行：GPT-6 Luna 子代理翻译 → GPT-6.1 Sol 补全 TODO 并验收 → 构建及相关代码检查 → 单独提交并推送。验收包含原文完整性、术语、技术准确性、示例和内部链接，技术补充优先查证官方文档。实际完成情况和检查证据见 [逐章记录](TRANSLATION_PROGRESS.md)。
 
-第四轮最终本地复核通过：书籍构建、全部 25 篇已完成章节的链接与锚点检查、13 个原有测试和 101 个指南及参考篇验证测试（累计 114 个），以及新增示例的格式检查。本轮新增 15 个测试，涵盖状态所有者、取消后恢复、有界轮询、固定投影和回调注销确认；Pinning 原有 21 个标题锚点、46 处外链和 5 个脚注均保留。FFI 使用安全 Rust 生命周期模型，没有链接真实 C 库；跨语言比较仅核查官方文档，未运行其他语言或比较性能。其他平台及实验功能的验证边界见逐章记录。CI 留给仓库所有者自行查看，不作为上传的等待条件。
+第五轮最终本地复核通过：书籍构建、全部 31 篇已完成章节的链接与锚点检查、13 个原有测试和 106 个独立验证测试（累计 119 个），以及独立验证 crate 和本轮修改的两个旧示例的格式检查。本轮新增 5 个测试，覆盖挂起状态的析构、内部借用、监督者关闭与错误、学习和跳舞的真实 Pending 交错。稳定 Rust 1.96 的 MIR 已实际观察；五篇已有原文的标题锚点、外链和脚注均保留。旧版下载函数仍为明确标注的历史占位，没有发出 HTTP 请求；未运行第三方作用域库或实验 AsyncDrop，也未做性能基准。其他平台及实验功能的验证边界见逐篇记录。CI 留给仓库所有者自行查看，不作为上传的等待条件。
 
 书前导言也已单独完成翻译与技术校订，包含三个小节和全部脚注，保留原英文锚点并补齐阻塞 I/O 链接；引用的 Hello World 示例已用现有 Rust 工具链实际运行并正常输出。
 

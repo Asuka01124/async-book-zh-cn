@@ -117,6 +117,8 @@ Future 不一定正常完成。调用者可能在尚未轮询、第一次挂起�
 
 本章无需 nightly、`-Z` 或自行编译 rustc。以下命令在仓库根目录执行，使用现有工具链，把与正文共享的源码编译为库并输出 MIR；未开启 `cfg(test)`，因此不需要示例中的测试依赖：
 
+首次使用时请先创建输出目录 `.tools`，或把 `-o` 改为已有目录中的文件名；该目录不随仓库提交。
+
 ```text
 rustc +1.96.0 --edition=2021 --crate-type=lib --emit=mir examples/guide-tests/src/rustc_async.rs -o .tools/round5-rustc-async.mir
 ```
