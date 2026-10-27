@@ -334,3 +334,10 @@
 - 补充简短协议导读：区分 Future 与执行器任务，说明 await 不自动生成独立任务、唤醒不等于完成或立即运行、poll 应快速返回；将跳读及下一节变成实际章节链接，没有扩写为教程。
 - 实际打开标准库 Future 与 Waker 官方文档并附正文链接；仅涉及稳定协议，不引入在线文档较新版本的 API。
 - mdBook 0.5.4 构建 `.tools/round6-chapter31-reviewed`、指定本篇的 `check_chapters.py` 与 `git diff --check` 通过。生成 HTML 保留旧英文标题锚点；原文无外链/include/脚注需要迁移。本章无代码示例，不新增或重跑代码测试，不将既有 119 测试记作本次实测。不查询、监听或等待 CI。
+## 第六轮（2026-10-27）：第 32 篇，Future trait
+
+- GPT-6 Luna 完整翻译正文及 `examples/02_02_future_trait/src/lib.rs` 英文注释，GPT-6.1 Sol 技术校订；保留原 `the-future-trait` 标题 id 和全部 5 个 include，SUMMARY 同步中文。原文无外链或脚注。
+- 保留简化协议、SocketRead、Join、AndThenFut 和真实 trait 五部分，校正快速非阻塞 poll、唤醒仅提示重试/可合并、同任务并发不等于线程并行、组合步骤无额外堆分配不等于整体零分配、完成后不应再 poll、fn 指针不能捕获任务环境、最新 Waker、Pin/Unpin 与字段投影边界。
+- 明示 Socket 恒真检查/空向量/noop 回调是历史教学占位，解释检查与注册之间的竞争及真实非阻塞 I/O 的 EOF/错误/重试责任；源码注释同步标注占位，没有把它当真实网络验证，也没有更改源码行为。AndThenFut 预持两个 Future 的限制保留。
+- 实际打开标准库 Future、Waker、pin 官方资料并在正文链接；未使用在线较新文档新增 API。用户已有 Rust 1.96.0 对旧包执行 `cargo test --offline --locked -p example_02_02_future_trait` 编译成功，单元及文档测试均为 0，保留既有 dead_code 警告；不把编译称作网络/并发实测，不新增凑数测试。
+- mdBook 0.5.4 `.tools/round6-chapter32-final`、指定本篇 HTML/链接/锚点检查和 `git diff --check` 通过。首次检查发现新增固定章节链接路径错误，已接入已完成的 `part-reference/pinning.md` 后重新构建检查通过。不查询、监听或等待 CI。

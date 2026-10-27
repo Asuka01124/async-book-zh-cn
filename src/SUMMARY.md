@@ -47,7 +47,7 @@
   - [异步 Rust 的现状](01_getting_started/03_state_of_async_rust.md)
   - [`async`/`.await` 入门](01_getting_started/04_async_await_primer.md)
 - [底层原理：执行 `Future` 与任务](02_execution/01_chapter.md)
-  - [The `Future` Trait](02_execution/02_future.md)
+  - [`Future` trait](02_execution/02_future.md)
   - [Task Wakeups with `Waker`](02_execution/03_wakeups.md)
   - [Applied: Build an Executor](02_execution/04_executor.md)
   - [Executors and System IO](02_execution/05_io.md)
