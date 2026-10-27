@@ -349,3 +349,11 @@
 - Rust 1.96.0 的该包 `cargo test --offline --locked` 实际 3 测试通过：原有 1 秒真实线程测试及新增 2 个，无警告。新增仅 2 个，总已有测试计数应为 121（独立 crate 106，旧 workspace 15）；本次未重跑这全部 121 个。指定包 cargo fmt 已执行，无新依赖。
 - 解释一计时器一线程、同步 new 即启动、drop 不取消线程、没有创建失败/锁中毒恢复的教学边界；Future 不等于任务本身、Pin 不禁止转移固定句柄、唤醒可合并且不保证结果就绪。实际核查标准库 Waker/RawWakerVTable/Wake，并附 Future 协议资料。
 - mdBook `.tools/round6-chapter33-final`、指定本篇 HTML/链接/锚点检查与 git diff --check 通过。没有查询、监听或等待 CI。
+## 第六轮（2026-10-27）：第 34 篇，实践：构建一个执行器
+
+- GPT-6 Luna 全文及源码注释翻译，GPT-6.1 Sol 技术校订；原标题 id、全部 6 个 include 与原参考式章节链接均保留，SUMMARY 同步中文。
+- 最小修复旧 executor：有界 sync_channel/try_send expect 改无界 channel/send，唤醒忽略接收端断连；spawn 对关闭仍明确 panic。run 短锁取 Future、锁外 poll/完成析构，Pending 再存回。单消费者保证先存回再处理 poll 期间的自唤醒，重复已完成消息跳过。没有冒称 bounded try_send 会阻塞死锁。
+- 校订 LocalWaker 为 Waker、ArcWake 的 waker/waker_ref API、Mutex 的跨线程共享意义和 UnsafeCell 证明责任；补计时器导入/同包 lib+main 复现方式、Future 构造外部工作边界、队列无界增长/无去重/无预算/无关闭取消协议和潜在自持 Waker 引用环。准确说明 recv 等待全部发送端释放且队列排空，外部保留 Waker 也能延长 run。
+- 原旧包新增 2 个回归：poll 内 10,001 次唤醒后 Pending 能恢复，随后 Ready 的重复排队不再 poll；关闭接收端后迟到 wake_by_ref/wake 不 panic。Rust1.96.0 该包离线锁包测试实际 3 项通过，包含原两秒 Timer 集成测试，无警告；不作为性能或任意多消费者正确性证明。累计已有 123 项（独立 106、旧 workspace17），本次不称全部重跑，无新依赖。
+- 实际核查标准库 channel/Receiver::recv；docs.rs ArcWake 页面工具不可访问，改读取本机已锁 futures-task0.3.34 的 arc_wake.rs/waker_ref.rs 确认 API，不把失败网页当成功浏览。
+- 指定包 cargo fmt 已执行；mdBook `.tools/round6-chapter34-reviewed`、指定本篇 HTML/链接/锚点检查及 git diff --check 通过。没有查询、监听或等待 CI。
