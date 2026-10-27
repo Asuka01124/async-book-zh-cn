@@ -341,3 +341,11 @@
 - 明示 Socket 恒真检查/空向量/noop 回调是历史教学占位，解释检查与注册之间的竞争及真实非阻塞 I/O 的 EOF/错误/重试责任；源码注释同步标注占位，没有把它当真实网络验证，也没有更改源码行为。AndThenFut 预持两个 Future 的限制保留。
 - 实际打开标准库 Future、Waker、pin 官方资料并在正文链接；未使用在线较新文档新增 API。用户已有 Rust 1.96.0 对旧包执行 `cargo test --offline --locked -p example_02_02_future_trait` 编译成功，单元及文档测试均为 0，保留既有 dead_code 警告；不把编译称作网络/并发实测，不新增凑数测试。
 - mdBook 0.5.4 `.tools/round6-chapter32-final`、指定本篇 HTML/链接/锚点检查和 `git diff --check` 通过。首次检查发现新增固定章节链接路径错误，已接入已完成的 `part-reference/pinning.md` 后重新构建检查通过。不查询、监听或等待 CI。
+## 第六轮（2026-10-27）：第 33 篇，使用 Waker 唤醒任务
+
+- GPT-6 Luna 完整翻译正文及 Timer 源码英文注释，GPT-6.1 Sol 校订；两个原英文标题 id 与全部 4 个 include 保留，SUMMARY 同步中文。
+- Timer 做最小锁边界修复：首次检查后锁外 clone，再锁内复查/替换；旧及未使用句柄锁外 drop；完成线程锁内 set/take，锁外 wake。避免自定义 Waker 回调重入共享状态锁，复查防止克隆期间完成却丢失通知。所有 helper 都随原 timer_new include 展示，没有断开的示例。
+- 新增原旧包 2 个确定性测试：RawWaker 探针在 clone/drop/wake 中 try_lock 验证锁已释放，检查只通知最新 Waker、已完成轮询不再克隆；clone 钩子精确模拟完成落在检查/注册之间，以及首次 poll 前完成。RawWaker 的 Arc 强计数/线程安全不变量有 SAFETY 注释；测试用 Weak 避免状态/句柄循环。未声称覆盖所有线程交错或运行 Miri。
+- Rust 1.96.0 的该包 `cargo test --offline --locked` 实际 3 测试通过：原有 1 秒真实线程测试及新增 2 个，无警告。新增仅 2 个，总已有测试计数应为 121（独立 crate 106，旧 workspace 15）；本次未重跑这全部 121 个。指定包 cargo fmt 已执行，无新依赖。
+- 解释一计时器一线程、同步 new 即启动、drop 不取消线程、没有创建失败/锁中毒恢复的教学边界；Future 不等于任务本身、Pin 不禁止转移固定句柄、唤醒可合并且不保证结果就绪。实际核查标准库 Waker/RawWakerVTable/Wake，并附 Future 协议资料。
+- mdBook `.tools/round6-chapter33-final`、指定本篇 HTML/链接/锚点检查与 git diff --check 通过。没有查询、监听或等待 CI。

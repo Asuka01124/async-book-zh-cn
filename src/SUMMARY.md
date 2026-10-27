@@ -48,7 +48,7 @@
   - [`async`/`.await` 入门](01_getting_started/04_async_await_primer.md)
 - [底层原理：执行 `Future` 与任务](02_execution/01_chapter.md)
   - [`Future` trait](02_execution/02_future.md)
-  - [Task Wakeups with `Waker`](02_execution/03_wakeups.md)
+  - [使用 `Waker` 唤醒任务](02_execution/03_wakeups.md)
   - [Applied: Build an Executor](02_execution/04_executor.md)
   - [Executors and System IO](02_execution/05_io.md)
 - [`async`/`await`](03_async_await/01_chapter.md)
