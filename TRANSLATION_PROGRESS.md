@@ -328,3 +328,9 @@
 - 旧examples/01_04_async_await_primer/src/lib.rs注释已完整中文并明示learn/sing/dance立即Ready桩不提供交错证据；旧3测试运行通过（原旧13中已有，不新增计数）。新增共享primer.rs复用第25章YieldOnce，1确定性测试检查两次真实Pending、学会才唱、跳舞在学习/唱歌等待中推进及最后完成。累计106独立测试，本章仅过滤新增1，无新依赖。
 - 实际打开Reference await、IntoFuture、futures block_on/join和futures-executor local_pool官方源码；新例为手动poll/无操作Waker的确定性无IO演示，不宣称音乐/动画/真实计时/网络/性能基准或一般执行器调度次序。
 - Rust1.96，旧包cargo test --offline --locked -p、旧包及独立crate cargo fmt --check、mdbook `.tools/round5-chapter-30`、前30章加导言共31篇HTML/链接/锚点/未完成标记、旧锚点/include保留比对与git diff --check通过。到本章停止，不修改02_execution/navigation及更后章节；不查询、监听或等待CI。
+## 第六轮（2026-10-27）：第 31 篇，底层原理：执行 Future 与任务
+
+- GPT-6 Luna 完整翻译原两段短导读，GPT-6.1 Sol 技术校审；保留原英文标题 id `under-the-hood-executing-futures-and-tasks`，同步 SUMMARY 中文标题。原文无外链、脚注、include 或未完成项；原文快照存于忽略目录 `.tools/round6-original-02_execution-01_chapter.md`。
+- 补充简短协议导读：区分 Future 与执行器任务，说明 await 不自动生成独立任务、唤醒不等于完成或立即运行、poll 应快速返回；将跳读及下一节变成实际章节链接，没有扩写为教程。
+- 实际打开标准库 Future 与 Waker 官方文档并附正文链接；仅涉及稳定协议，不引入在线文档较新版本的 API。
+- mdBook 0.5.4 构建 `.tools/round6-chapter31-reviewed`、指定本篇的 `check_chapters.py` 与 `git diff --check` 通过。生成 HTML 保留旧英文标题锚点；原文无外链/include/脚注需要迁移。本章无代码示例，不新增或重跑代码测试，不将既有 119 测试记作本次实测。不查询、监听或等待 CI。
