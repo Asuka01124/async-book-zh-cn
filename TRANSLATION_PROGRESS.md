@@ -364,3 +364,11 @@
 - 保留兴趣注册/事件ID/分发与回调映射两块完整伪代码主题，明确不是可编译系统绑定、前文 Socket 仍为教学占位；补最新 Waker/注册复查/先发布状态与锁外通知、多个等待者/注销/ID复用责任。说明伪就绪、非阻塞 drain 到 WouldBlock/EOF/实际错误，以及单次上层读取或公平预算必须保留就绪/安排继续处理。
 - 实际打开 Mio官方仓库与Poll1.2.4文档、Microsoft IOCP资料，并通过Fuchsia官方源码/系统调用搜索核查port；直接Fuchsia旧页面不可访问，不把访问失败当成功。接入已完成的 io-models/io 章，不重写操作系统驱动。
 - mdBook `.tools/round6-chapter35-reviewed`、指定本篇 HTML/链接/锚点与 git diff --check 通过。本章纯文档无新增测试/依赖，没有执行Linux/IOCP/Fuchsia系统验证或性能基准，没有把伪代码算实测；既有累计测试计数不作本篇重新执行。没有查询、监听或等待CI。
+## 第六轮（2026-10-27）：第 36 篇，async/.await
+
+- GPT-6 Luna 完整翻译正文及 `examples/03_01_async_await/src/lib.rs` 注释，GPT-6.1 Sol 技术校订；原 4 标题 id 与 4 个 include、原 Primer 参考式链接保留，SUMMARY 标题统一为正文的 `.await` 写法。
+- 保留语法、生命周期、所有权/move、多线程四主题，补 IntoFuture/立即Ready不必让出/普通await不spawn，参数与外部工作不受体惰性保证；good内部局部所有权与bad栈借用区别、static不等于存活到进程退出、Copy/Arc共享、move引用仍受借用限制、构造捕获和跨挂起状态共同决定Send，以及LocalSet本地非Send任务。
+- 校订标准Mutex并非一概不可用：短且不跨await临界区可用，跨await阻塞竞争/Guard非Send与逻辑死锁需区分；异步锁也不保证无死锁。实际打开Reference await/async块、Tokio共享状态及LocalSet官方文档，接入已有同步/Primer真实Pending/rustc Send章节。
+- 实际使用Rust1.96.0执行3个最小编译负例：提取原bad拒绝（E0597）、async move借用不能成为static、async fn捕获Rc即使await前drop仍非Send；另1个正例编译并运行，验证拥有内部局部数据与await前独立作用域Rc满足Send/static。产物/诊断在 `.tools/round6-36-compile`，不纳入单元测试计数。
+- 旧包离线锁包 cargo test 编译成功，单元/文档测试均0；保留既有 never_compiled unexpected_cfgs 警告，不把包成功当作负例验证。无新增测试/依赖，不重跑已有完整测试，不将立即Ready示例称作调度实测。
+- mdBook `.tools/round6-chapter36-final`、指定本篇HTML/链接/锚点与git diff --check通过。保留父拥有的check_chapters脚本改动；本轮到此止，没有查询、监听或等待CI。
