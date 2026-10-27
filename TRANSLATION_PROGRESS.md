@@ -357,3 +357,10 @@
 - 原旧包新增 2 个回归：poll 内 10,001 次唤醒后 Pending 能恢复，随后 Ready 的重复排队不再 poll；关闭接收端后迟到 wake_by_ref/wake 不 panic。Rust1.96.0 该包离线锁包测试实际 3 项通过，包含原两秒 Timer 集成测试，无警告；不作为性能或任意多消费者正确性证明。累计已有 123 项（独立 106、旧 workspace17），本次不称全部重跑，无新依赖。
 - 实际核查标准库 channel/Receiver::recv；docs.rs ArcWake 页面工具不可访问，改读取本机已锁 futures-task0.3.34 的 arc_wake.rs/waker_ref.rs 确认 API，不把失败网页当成功浏览。
 - 指定包 cargo fmt 已执行；mdBook `.tools/round6-chapter34-reviewed`、指定本篇 HTML/链接/锚点检查及 git diff --check 通过。没有查询、监听或等待 CI。
+## 第六轮（2026-10-27）：第 35 篇，执行器与系统 IO
+
+- GPT-6 Luna 完整翻译正文及两块内嵌伪代码注释，GPT-6.1 Sol 技术校订；原标题 id、SocketRead include、mio 外链与原 Future 章节参考式链接全部保留，SUMMARY 同步中文。
+- 校正 readiness 与 completion，Windows IOCP 完成通知由 Mio 适配为就绪接口；保留 Fuchsia port 历史主题并引用官方接口，但当前核查的 Mio1.2.4 支持列表不含 Fuchsia，不再断言所有旧平台均被当前 Mio 支持。
+- 保留兴趣注册/事件ID/分发与回调映射两块完整伪代码主题，明确不是可编译系统绑定、前文 Socket 仍为教学占位；补最新 Waker/注册复查/先发布状态与锁外通知、多个等待者/注销/ID复用责任。说明伪就绪、非阻塞 drain 到 WouldBlock/EOF/实际错误，以及单次上层读取或公平预算必须保留就绪/安排继续处理。
+- 实际打开 Mio官方仓库与Poll1.2.4文档、Microsoft IOCP资料，并通过Fuchsia官方源码/系统调用搜索核查port；直接Fuchsia旧页面不可访问，不把访问失败当成功。接入已完成的 io-models/io 章，不重写操作系统驱动。
+- mdBook `.tools/round6-chapter35-reviewed`、指定本篇 HTML/链接/锚点与 git diff --check 通过。本章纯文档无新增测试/依赖，没有执行Linux/IOCP/Fuchsia系统验证或性能基准，没有把伪代码算实测；既有累计测试计数不作本篇重新执行。没有查询、监听或等待CI。

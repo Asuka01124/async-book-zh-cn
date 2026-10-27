@@ -50,7 +50,7 @@
   - [`Future` trait](02_execution/02_future.md)
   - [使用 `Waker` 唤醒任务](02_execution/03_wakeups.md)
   - [实践：构建一个执行器](02_execution/04_executor.md)
-  - [Executors and System IO](02_execution/05_io.md)
+  - [执行器与系统 IO](02_execution/05_io.md)
 - [`async`/`await`](03_async_await/01_chapter.md)
 - [Streams](05_streams/01_chapter.md)
   - [Iteration and Concurrency](05_streams/02_iteration_and_concurrency.md)
