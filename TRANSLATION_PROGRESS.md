@@ -1,6 +1,20 @@
 # 翻译与补全进度
 
-已完成新版指南全部 13 篇、参考篇全部 13 篇、旧版入门四篇及书前导言，累计 31 篇。第一、二轮为指南第 1—12 篇（2026-10-22/23）；第三轮为指南最后一篇及参考前五篇，另加书前导言（10-24）；第四轮为参考接下来的六篇（10-25）；第五轮为参考最后两篇与旧版入门前四篇（10-26）。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。仅有目录标题的条目由 Luna 翻译标题、Sol 原创补写正文，已有原文则完整翻译并补全。上游基线：`840327a`。各篇逐篇翻译、校审、验证、提交并推送后，再开始下一篇。其余旧版章节及其他导航内容暂保留上游内容；各轮日期与结果保留为历史证据。
+已完成新版指南全部 13 篇、参考篇全部 13 篇、旧版前十篇及书前导言，累计 37 篇。第一、二轮为指南第 1—12 篇（2026-10-22/23）；第三轮为指南最后一篇及参考前五篇，另加书前导言（10-24）；第四轮为参考接下来的六篇（10-25）；第五轮为参考最后两篇与旧版入门前四篇（10-26）；第六轮为旧版执行原理五篇及 async/await 详解（10-27）。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。仅有目录标题的条目由 Luna 翻译标题、Sol 原创补写正文，已有原文则完整翻译并补全。上游基线：`840327a`。各篇逐篇翻译、校审、验证、提交并推送后，再开始下一篇。其余旧版章节及其他导航内容暂保留上游内容；各轮日期与结果保留为历史证据。
+
+## 第六轮最终本地复核（2026-10-27）
+
+第 31—36 篇已由 Luna 完整翻译正文及所引源码注释，Sol 技术校订，父代理实际阅读全文与源码验收；每篇独立提交并通过用户现有 GitHub API 快进上传，确认上传后再开始下一篇。最后一篇两处语义措辞经 Sol 追加审读通过，六个主提交索引见 README。
+
+- mdBook 0.5.4：`mdbook build --dest-dir .tools/round6-final-book` 成功。
+- `python scripts/check_chapters.py --output .tools/round6-final-book`：默认全部 37 篇通过未完成标记、空链接、本地文件、锚点及重复 HTML id 检查，新增六篇已纳入默认范围。
+- 用户已有 Rust 1.96.0：`cargo +1.96.0 test --offline --workspace --manifest-path examples/Cargo.toml --target-dir target`，旧工作区 17 测试通过、0 失败，保留上游既有警告。相较上轮增加 Timer 2 项及 Executor 2 项回归；原计时器与执行器集成测试也实际重跑。
+- `cargo +1.96.0 test --offline --locked --manifest-path examples/guide-tests/Cargo.toml --target-dir target/guide-tests`，独立 crate 106 测试全部通过、0 失败、无编译警告。真实本机 TCP 测试获所需权限执行；此 crate 随后未再修改，无需重复运行。
+- `cargo +1.96.0 fmt --manifest-path examples/Cargo.toml -p example_02_03_timer -p example_02_04_executor --check`、独立 crate 的格式检查及 `git diff --check` 通过。保持 `CARGO_INCREMENTAL=0`，不安装新工具链或新增依赖。
+- Rust 1.96.0 实际拒绝 3 个编译负例（局部栈借用、move 引用与 static、构造捕获 Rc 与 Send），另有 1 个正例编译并运行。正例验证编译约束，不冒充其立即 Ready Future 的调度实测；这 4 项不混入单元测试计数。
+- 对照本轮基线 `d340f2a` 及上轮生成的 HTML，六篇原有 10 个标题锚点、20 个 include、mio 外链及原章节引用全部保留，原文无脚注。书籍源码仅改本轮六篇及 SUMMARY，既有 CI/Pages 工作流未变。
+
+本轮累计 123 个本地测试通过。Timer 回归使用确定性自定义 Waker 验证锁外 clone/drop/wake 与注册间隙完成；Executor 回归覆盖一次 poll 内 10,001 次唤醒、Pending 恢复、完成后重复消息及关闭后的迟到唤醒。教学执行器仍无背压、唤醒去重或完整关闭协议。Socket 与 IoBlocker 仍明确为示意，没有实现或声称实测 Linux、Windows IOCP 或 Fuchsia 后端，也不把行为测试当性能或任意线程交错证明。不查询、监听或等待 CI。
 
 ## 第五轮最终本地复核（2026-10-26）
 

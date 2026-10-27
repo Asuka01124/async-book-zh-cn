@@ -36,6 +36,12 @@ CHAPTERS = (
     "01_getting_started/02_why_async.md",
     "01_getting_started/03_state_of_async_rust.md",
     "01_getting_started/04_async_await_primer.md",
+    "02_execution/01_chapter.md",
+    "02_execution/02_future.md",
+    "02_execution/03_wakeups.md",
+    "02_execution/04_executor.md",
+    "02_execution/05_io.md",
+    "03_async_await/01_chapter.md",
 )
 
 
