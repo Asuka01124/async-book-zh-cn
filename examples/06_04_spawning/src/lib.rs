@@ -14,18 +14,22 @@ async fn process_request(stream: &mut TcpStream) -> Result<(), std::io::Error>{
 async fn main() {
     let listener = TcpListener::bind("127.0.0.1:8080").await.unwrap();
     loop {
-        // Accept a new connection
+        // 接受一个新连接
         let (mut stream, _) = listener.accept().await.unwrap();
-        // Now process this request without blocking the main loop
-        task::spawn(async move {process_request(&mut stream).await});
+        // 独立处理连接；丢弃句柄会分离任务，因而在任务内观察写入错误。
+        task::spawn(async move {
+            if let Err(error) = process_request(&mut stream).await {
+                eprintln!("处理连接失败：{}", error);
+            }
+        });
     }
 }
 // ANCHOR_END: example
 use std::time::Duration;
 async fn my_task(time: Duration) {
-    println!("Hello from my_task with time {:?}", time);
+    println!("my_task 开始运行，时长 {:?}", time);
     task::sleep(time).await;
-    println!("Goodbye from my_task with time {:?}", time);
+    println!("my_task 运行结束，时长 {:?}", time);
 }
 // ANCHOR: join_all
 use futures::future::join_all;
@@ -35,7 +39,7 @@ async fn task_spawner(){
         task::spawn(my_task(Duration::from_secs(2))),
         task::spawn(my_task(Duration::from_secs(3))),
     ];
-    // If we do not await these tasks and the function finishes, they will be dropped
+    // 等待所有已生成任务结束；直接丢弃这些句柄会分离任务，不会自动取消。
     join_all(tasks).await;
 }
 // ANCHOR_END: join_all
@@ -43,4 +47,44 @@ async fn task_spawner(){
 #[test]
 fn run_task_spawner() {
     futures::executor::block_on(task_spawner());
+}
+
+#[test]
+fn dropped_handle_detaches_and_explicit_cancel_releases_resources() {
+    use futures::channel::oneshot;
+
+    struct NotifyOnDrop(Option<oneshot::Sender<()>>);
+    impl Drop for NotifyOnDrop {
+        fn drop(&mut self) {
+            if let Some(sender) = self.0.take() { let _ = sender.send(()); }
+        }
+    }
+
+    task::block_on(async {
+        let (started_tx, started_rx) = oneshot::channel();
+        let (release_tx, release_rx) = oneshot::channel();
+        let (finished_tx, finished_rx) = oneshot::channel();
+        let handle = task::spawn(async move {
+            started_tx.send(()).unwrap();
+            release_rx.await.unwrap();
+            finished_tx.send(7).unwrap();
+        });
+        started_rx.await.unwrap();
+        // 先丢句柄，再允许任务完成，以握手验证 detach 而非依赖墙钟。
+        drop(handle);
+        release_tx.send(()).unwrap();
+        assert_eq!(finished_rx.await.unwrap(), 7);
+
+        let (started_tx, started_rx) = oneshot::channel();
+        let (dropped_tx, dropped_rx) = oneshot::channel();
+        let handle = task::spawn(async move {
+            let _guard = NotifyOnDrop(Some(dropped_tx));
+            started_tx.send(()).unwrap();
+            std::future::pending::<()>().await;
+        });
+        // 资源已经构造且任务已开始，才请求取消。
+        started_rx.await.unwrap();
+        assert_eq!(handle.cancel().await, None);
+        dropped_rx.await.unwrap();
+    });
 }

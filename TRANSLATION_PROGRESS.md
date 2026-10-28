@@ -428,3 +428,12 @@
 - 新增 1 项确定性状态测试，验证 default、complete优先、terminated Fuse set 后重激活、直接async表达式固定，以及 Unordered 初空首次default/次轮complete、排空后push恢复；不依赖随机分支顺序。初跑先后发现 pending 恒终止与新空集合尚未报告终止两处测试前提错误，已依据源码和实测修正测试及正文，没有改库语义。
 - Rust1.96 离线锁包最终 2 项通过（原count+新增1），文档测试0，保留原10条dead_code警告；累计已有125项（独立106、旧workspace19），本篇未重跑全部，无新依赖。指定包fmt/check已执行；mdBook `.tools/round7-chapter41-final`、单篇HTML/链接/4锚点、原5include比对及git diff --check通过。
 - 保留父拥有的 check_chapters.py 改动；到此篇停止，等待父验收、commit 与 API 上传成功后继续，不查询、监听或等待CI。
+
+## 第七轮（2026-10-28）：第 42 篇，生成任务（Spawning）
+
+- GPT-6 Luna 完整翻译正文及 `examples/06_04_spawning/src/lib.rs` 原英文注释/输出，GPT-6.1 Sol 技术校订；保留原标题 id `spawning` 与全部 2 include，SUMMARY 同步中文。原文无外链、脚注、参考式章节引用或未完成项。HTTP正文保留原Hello World字节，避免翻译引入无关协议数据变化。
+- 实质纠正原文“外层函数结束会取消任务”：async-std JoinHandle 丢弃是 detach，独立调度与是否await区分、await挂起任务非线程阻塞、Send/static及输出约束、任务结果错误观察、函数返回/运行时停止/进程退出不同、显式cancel().await与取消非抢占/副作用不回滚均说明。join_all 等待已spawn任务并按输入顺序收集，不把组合器当任务生成来源。
+- 实际打开 async-std 1.13.2 spawn/JoinHandle 官方文档与仓库README；截至本次校订官方已明确discontinued并建议smol，正文标为历史示例，未新增/迁移依赖。读取锁定 async-std JoinHandle drop/cancel 与 async-task cancel 源码核实 detach及等待停止行为。
+- 保留连接处理教学结构，仅将丢弃句柄下会静默丢失的process_request错误改为在子任务内eprintln观察；指出仅写固定HTTP字节，不解析请求/非完整HTTP服务器，普通async main需运行时入口、无限接受与无关闭/背压策略未被包装成生产实现。本次未运行该监听示例或声称网络实测。
+- 新增1项确定性oneshot握手测试：任务已启动后丢句柄，再放行并收到完成结果；另在资源guard已构造的任务中显式cancel，验证None与析构通知。无墙钟竞速、无新依赖。Rust1.96离线锁包2项通过（原join_all三任务+新增1）、文档测试0，无警告；原3秒等待仅保留原测试，不作为性能比较。累计已有126项（独立106、旧workspace20），本篇未重跑全部。
+- 指定包cargo fmt已执行；mdBook `.tools/round7-chapter42-reviewed`、指定本篇HTML/链接/锚点、原2include比对与git diff --check通过。保留父拥有的check_chapters.py改动；本轮六篇到此完成，未延伸后续TODO导航，等待父验收/commit/API上传与最终汇总；不查询、监听或等待CI。

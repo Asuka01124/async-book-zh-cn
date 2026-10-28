@@ -57,7 +57,7 @@
 - [同时执行多个 Future](06_multiple_futures/01_chapter.md)
   - [`join!`](06_multiple_futures/02_join.md)
   - [`select!`](06_multiple_futures/03_select.md)
-  - [Spawning](06_multiple_futures/04_spawning.md)
+  - [生成任务（Spawning）](06_multiple_futures/04_spawning.md)
   - [TODO: Cancellation and Timeouts]()
   - [TODO: `FuturesUnordered`]()
 - [Workarounds to Know and Love](07_workarounds/01_chapter.md)
