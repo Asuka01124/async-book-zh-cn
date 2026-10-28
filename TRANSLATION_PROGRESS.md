@@ -403,3 +403,10 @@
 - 实际打开 futures 0.3.34 的 StreamExt/TryStreamExt 官方文档并附正文链接，同时读取本机锁定 try_for_each_concurrent/for_each_concurrent 源码核查 limit 转换与错误清空行为。接入已完成 Stream 与取消安全章节。
 - Rust 1.96.0 该旧包离线锁包 cargo test：既有 2 项求和测试通过、文档测试 0，无警告；无代码行为修改、新测试或依赖。guide-tests 已有 streams_buffer_order_and_concurrency_limit，父本轮已完整跑过其 106 项，本篇不重复执行，也不把两项求和测试冒称并发/取消实测。
 - mdBook `.tools/round7-chapter38-reviewed`、指定本篇 HTML/链接/锚点检查、原两处 include 比对及 git diff --check 通过。保留父拥有的 check_chapters.py 改动；仅到本篇，等待父验收、commit 与 API 上传成功后再继续；不查询、监听或等待 CI。
+
+## 第七轮（2026-10-28）：第 39 篇，同时执行多个 Future
+
+- GPT-6 Luna 完整翻译原两段与四项导读，GPT-6.1 Sol 技术校订；保留原标题 id `executing-multiple-futures-at-a-time`，SUMMARY 同步中文。原文无源码、include、外链、脚注、参考式章节引用或未完成项。
+- 校正 await 尚未就绪时挂起任务而非阻塞线程/自动 spawn，join/select 在当前任务并发轮询；spawn 的完成/取消/关闭取决运行时与 API；FuturesUnordered 必须由流消费驱动且加入 Future 不自动 spawn。保留四项主题并接有效章节链接，用简短段落说明并发与线程并行、观察顺序与严格物理完成顺序的区别，没有扩成完整教程。
+- 实际打开 futures 0.3.34 的 join/select/FuturesUnordered 官方文档并附链接；固定版本 URL 工具失败后改 latest 成功，返回版本确为 0.3.34。另查本机锁定 FuturesUnordered 源码说明验证 push 不 poll 与需要 poll_next 驱动。
+- mdBook `.tools/round7-chapter39-reviewed`、指定本篇 HTML/链接/锚点检查与 git diff --check 通过。本篇纯导读，无新增测试/依赖，也未重跑代码测试；保留父拥有的 check_chapters.py 改动。到此篇停止，等待父验收、commit 与 API 上传成功后继续；不查询、监听或等待 CI。
