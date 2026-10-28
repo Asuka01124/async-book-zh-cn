@@ -418,3 +418,13 @@
 - 明示 get_book/music 均为立即就绪占位、Result 版本只返回 Ok，不能作为耗时或交错验证；正文接已完成组合与取消章节。实际打开 futures 0.3.34 join/try_join 官方资料与 Rust Reference，核查本机锁定 futures-macro 的 join.rs，没有混用 Tokio 宏调度语义。
 - 旧包新增 1 项确定性测试：显式先将探针 poll 至 Pending，再分别验证 futures::try_join 错误返回时 owned 探针析构、borrowed 探针仍可继续 poll 且调用方 drop 才析构；不依赖宏分支轮询次序，无性能/任意线程交错断言。Rust 1.96.0 离线锁包 cargo test 实际 1 项通过、文档测试 0；保留原教学函数未使用的 13 条 dead_code 警告。累计已有 124 项（独立 106、旧 workspace 18），本篇未重跑全部；无新依赖。
 - 指定包 cargo fmt 已执行；mdBook `.tools/round7-chapter40-reviewed`、指定本篇 HTML/链接/锚点、原 5 include 比对与 git diff --check 通过。保留父拥有的 check_chapters.py 改动；到此篇停止，等待父验收、commit 与 API 上传成功后继续；不查询、监听或等待 CI。
+
+## 第七轮（2026-10-28）：第 41 篇，select!
+
+- GPT-6 Luna 全文及 `examples/06_03_select/src/lib.rs` 原英文注释/输出翻译，GPT-6.1 Sol 技术校订；保留原 4 标题 id 与全部 5 include，默认/完成、固定与融合、流、terminated Fuse 替换、Unordered 主题完整。SUMMARY 原宏名已一致，无需更改；原文无外链、脚注、参考式章节引用或未完成项。
+- 校订 futures::select 同任务轮询/多就绪伪随机选择，输出改为“被选中”避免物理最先完成误解；局部丢弃与外部后台任务/副作用区别。default 选择不挂起不保证 handler/poll 非阻塞，忙等风险与 complete 优先明确；路径借用要求 Unpin、直接表达式栈固定例外、Pin句柄而非内部Future变Unpin、循环外fuse与流next状态保留完整解释。
+- 说明 FusedFuture 终止不一定曾返回值，pending 自带恒终止而 pending().fuse 可表示活跃等待；select_next_some 产生 Item、终止分支排除、误 poll 终止流会 panic，以及首次发现None先Pending/wake、下一次选择才排除。解释 Pin::set 原地析构旧值/同类型替换，Unordered 需要驱动、暂空后可push再激活、无并发上限、退出与取消责任。无限interval是输入假设、常量与空函数均教学占位，非真实timer/系统实测。
+- 实际打开 futures 0.3.34 select/Fuse/StreamExt 与标准库 Pin::set 官方资料并附链接，读取本机锁定 select宏、pending、Fuse、select_next_some、FuturesUnordered 源码核查细节；标准库在线较新页面只引用既有稳定 set 语义，未引入新API。
+- 新增 1 项确定性状态测试，验证 default、complete优先、terminated Fuse set 后重激活、直接async表达式固定，以及 Unordered 初空首次default/次轮complete、排空后push恢复；不依赖随机分支顺序。初跑先后发现 pending 恒终止与新空集合尚未报告终止两处测试前提错误，已依据源码和实测修正测试及正文，没有改库语义。
+- Rust1.96 离线锁包最终 2 项通过（原count+新增1），文档测试0，保留原10条dead_code警告；累计已有125项（独立106、旧workspace19），本篇未重跑全部，无新依赖。指定包fmt/check已执行；mdBook `.tools/round7-chapter41-final`、单篇HTML/链接/4锚点、原5include比对及git diff --check通过。
+- 保留父拥有的 check_chapters.py 改动；到此篇停止，等待父验收、commit 与 API 上传成功后继续，不查询、监听或等待CI。
