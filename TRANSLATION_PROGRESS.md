@@ -410,3 +410,11 @@
 - 校正 await 尚未就绪时挂起任务而非阻塞线程/自动 spawn，join/select 在当前任务并发轮询；spawn 的完成/取消/关闭取决运行时与 API；FuturesUnordered 必须由流消费驱动且加入 Future 不自动 spawn。保留四项主题并接有效章节链接，用简短段落说明并发与线程并行、观察顺序与严格物理完成顺序的区别，没有扩成完整教程。
 - 实际打开 futures 0.3.34 的 join/select/FuturesUnordered 官方文档并附链接；固定版本 URL 工具失败后改 latest 成功，返回版本确为 0.3.34。另查本机锁定 FuturesUnordered 源码说明验证 push 不 poll 与需要 poll_next 驱动。
 - mdBook `.tools/round7-chapter39-reviewed`、指定本篇 HTML/链接/锚点检查与 git diff --check 通过。本篇纯导读，无新增测试/依赖，也未重跑代码测试；保留父拥有的 check_chapters.py 改动。到此篇停止，等待父验收、commit 与 API 上传成功后继续；不查询、监听或等待 CI。
+
+## 第七轮（2026-10-28）：第 40 篇，join!
+
+- GPT-6 Luna 完整翻译正文及 `examples/06_02_join/src/lib.rs` 原英文注释、占位注释与错误字符串，GPT-6.1 Sol 技术校订；原 3 个标题 id（join、join-1、try_join）和全部 5 个 include 保留。SUMMARY 原有宏名标题已与正文一致，无需更改；原文无外链、脚注、参考式章节引用或未完成项。
+- 保留顺序等待、其他语言对照、join、try_join 与统一错误类型全部主题；修正顺序不必然慢、async 函数体等待轮询而非只能 await 驱动、已启动后台工作例外。同任务 join 不 spawn/不自动线程并行、输出按参数顺序、Err 不使 join 提前结束；try_join 观察到错误即返回，owned 未完成 Future 被丢弃，borrowed 只释放借用，不回滚副作用/不保证终止后台任务。
+- 明示 get_book/music 均为立即就绪占位、Result 版本只返回 Ok，不能作为耗时或交错验证；正文接已完成组合与取消章节。实际打开 futures 0.3.34 join/try_join 官方资料与 Rust Reference，核查本机锁定 futures-macro 的 join.rs，没有混用 Tokio 宏调度语义。
+- 旧包新增 1 项确定性测试：显式先将探针 poll 至 Pending，再分别验证 futures::try_join 错误返回时 owned 探针析构、borrowed 探针仍可继续 poll 且调用方 drop 才析构；不依赖宏分支轮询次序，无性能/任意线程交错断言。Rust 1.96.0 离线锁包 cargo test 实际 1 项通过、文档测试 0；保留原教学函数未使用的 13 条 dead_code 警告。累计已有 124 项（独立 106、旧 workspace 18），本篇未重跑全部；无新依赖。
+- 指定包 cargo fmt 已执行；mdBook `.tools/round7-chapter40-reviewed`、指定本篇 HTML/链接/锚点、原 5 include 比对与 git diff --check 通过。保留父拥有的 check_chapters.py 改动；到此篇停止，等待父验收、commit 与 API 上传成功后继续；不查询、监听或等待 CI。
