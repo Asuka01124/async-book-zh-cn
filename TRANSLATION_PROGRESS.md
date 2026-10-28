@@ -386,3 +386,11 @@
 - 实际使用Rust1.96.0执行3个最小编译负例：提取原bad拒绝（E0597）、async move借用不能成为static、async fn捕获Rc即使await前drop仍非Send；另1个正例编译并运行，验证拥有内部局部数据与await前独立作用域Rc满足Send/static。产物/诊断在 `.tools/round6-36-compile`，不纳入单元测试计数。
 - 旧包离线锁包 cargo test 编译成功，单元/文档测试均0；保留既有 never_compiled unexpected_cfgs 警告，不把包成功当作负例验证。无新增测试/依赖，不重跑已有完整测试，不将立即Ready示例称作调度实测。
 - mdBook `.tools/round6-chapter36-final`、指定本篇HTML/链接/锚点与git diff --check通过。保留父拥有的check_chapters脚本改动；本轮到此止，没有查询、监听或等待CI。
+
+## 第七轮（2026-10-28）：第 37 篇，Stream trait
+
+- GPT-6 Luna 完整翻译正文及 `examples/05_01_streams/src/lib.rs` 英文注释，GPT-6.1 Sol 技术校订；原标题 id `the-stream-trait` 与全部 2 个 include 保留，SUMMARY 同步中文。原文无外链、脚注、参考式章节引用或未完成项。
+- 补充 poll_next 的 Pending/Waker、逐项就绪与结束三态协议，结束后不应继续轮询及 fuse 适配；明确所示为省略 size_hint 的核心接口。修正通道为全部 Sender（含克隆）释放且缓冲排空后结束，并说明 close 后排空、next 的 Future/Unpin 要求、有界通道背压与同任务先发后收的容量限制。
+- 实际打开 futures-core 0.3.31 官方 Stream 文档并附链接；futures-channel/StreamExt 网页工具无法访问，改查本机锁定 futures-channel/futures-util 0.3.34 源码确认 close、poll_next 与 next 要求，不把失败网页当成功浏览。接入已完成 Stream 与 Pinning 章节。
+- Rust 1.96.0 对旧包执行离线锁包 cargo test，既有通道测试 1 项通过、文档测试 0；保留教学 Stream trait 未使用的 dead_code 警告。无行为修改、新测试或新依赖，不把该立即就绪示例称作调度/挂起实测，也未重跑既有全部 123 项测试。
+- mdBook `.tools/round7-chapter37-reviewed`、指定本篇 HTML/链接/锚点检查、原两处 include 比对与 git diff --check 通过。仅完成本篇，等待父验收、commit 与 API 上传成功后才开始下一篇；不查询、监听或等待 CI。

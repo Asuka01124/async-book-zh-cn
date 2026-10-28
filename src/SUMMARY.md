@@ -52,7 +52,7 @@
   - [实践：构建一个执行器](02_execution/04_executor.md)
   - [执行器与系统 IO](02_execution/05_io.md)
 - [`async`/`.await`](03_async_await/01_chapter.md)
-- [Streams](05_streams/01_chapter.md)
+- [`Stream` trait](05_streams/01_chapter.md)
   - [Iteration and Concurrency](05_streams/02_iteration_and_concurrency.md)
 - [Executing Multiple Futures at a Time](06_multiple_futures/01_chapter.md)
   - [`join!`](06_multiple_futures/02_join.md)
