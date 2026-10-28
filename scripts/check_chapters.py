@@ -42,6 +42,12 @@ CHAPTERS = (
     "02_execution/04_executor.md",
     "02_execution/05_io.md",
     "03_async_await/01_chapter.md",
+    "05_streams/01_chapter.md",
+    "05_streams/02_iteration_and_concurrency.md",
+    "06_multiple_futures/01_chapter.md",
+    "06_multiple_futures/02_join.md",
+    "06_multiple_futures/03_select.md",
+    "06_multiple_futures/04_spawning.md",
 )
 
 

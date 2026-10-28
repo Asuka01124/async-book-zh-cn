@@ -1,6 +1,19 @@
 # 翻译与补全进度
 
-已完成新版指南全部 13 篇、参考篇全部 13 篇、旧版前十篇及书前导言，累计 37 篇。第一、二轮为指南第 1—12 篇（2026-10-22/23）；第三轮为指南最后一篇及参考前五篇，另加书前导言（10-24）；第四轮为参考接下来的六篇（10-25）；第五轮为参考最后两篇与旧版入门前四篇（10-26）；第六轮为旧版执行原理五篇及 async/await 详解（10-27）。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。仅有目录标题的条目由 Luna 翻译标题、Sol 原创补写正文，已有原文则完整翻译并补全。上游基线：`840327a`。各篇逐篇翻译、校审、验证、提交并推送后，再开始下一篇。其余旧版章节及其他导航内容暂保留上游内容；各轮日期与结果保留为历史证据。
+已完成新版指南全部 13 篇、参考篇全部 13 篇、旧版前十六篇及书前导言，累计 43 篇。第一、二轮为指南第 1—12 篇（2026-10-22/23）；第三轮为指南最后一篇及参考前五篇，另加书前导言（10-24）；第四轮为参考接下来的六篇（10-25）；第五轮为参考最后两篇与旧版入门前四篇（10-26）；第六轮为旧版执行原理五篇及 async/await 详解（10-27）；第七轮为旧版 Stream 两篇及多 Future 执行四篇（10-28）。翻译作者为 GPT-6 Luna；技术补全、校审与验收作者为 GPT-6.1 Sol。仅有目录标题的条目由 Luna 翻译标题、Sol 原创补写正文，已有原文则完整翻译并补全。上游基线：`840327a`。各篇逐篇翻译、校审、验证、提交并推送后，再开始下一篇。其余旧版章节及其他导航内容暂保留上游内容；各轮日期与结果保留为历史证据。
+
+## 第七轮最终本地复核（2026-10-28）
+
+第 37—42 篇已由 Luna 完整翻译正文与所引源码注释，Sol 技术校订；父代理实际阅读全文及源码验收，每篇独立提交并通过用户现有 GitHub API 快进上传，确认成功才开始下一篇。六个主提交索引见 README。没有扩展到其后的 TODO 导航条目或其他旧版章节。
+
+- mdBook 0.5.4：`mdbook build --dest-dir .tools/round7-final-book` 成功。
+- `python scripts/check_chapters.py --output .tools/round7-final-book`：默认全部 43 篇通过未完成标记、空链接、本地文件、锚点和重复 HTML id 检查，本轮六篇已纳入默认范围。
+- 用户已有 Rust 1.96.0：`cargo +1.96.0 test --offline --workspace --manifest-path examples/Cargo.toml --target-dir target`，旧工作区 20 测试通过、0 失败，保留上游既有警告。相较上轮增加 join、select、spawning 各 1 项确定性测试；原通道、求和、count 和三任务等待测试也实际重跑。
+- `cargo +1.96.0 test --offline --locked --manifest-path examples/guide-tests/Cargo.toml --target-dir target/guide-tests`，独立 crate 106 测试全部通过、0 失败、无编译警告。真实本机 TCP 测试获所需权限执行；此 crate 及其依赖随后未再改变，不重复执行。
+- `cargo +1.96.0 fmt --manifest-path examples/Cargo.toml -p example_06_02_join -p example_06_03_select -p example_06_04_spawning --check`、独立 crate 的格式检查及 `git diff --check` 通过。保持 `CARGO_INCREMENTAL=0`，不安装工具链或新增依赖。
+- 对照本轮基线 `fe7257d` 与上轮生成 HTML，六篇原有 11 个英文标题锚点及 16 个 include 全部保留，原文无外链、脚注或参考式章节引用。书籍源码仅改变本轮六篇及 SUMMARY，既有 CI/Pages 工作流未变。
+
+累计 126 个本地测试通过。新增验证分别覆盖 futures::try_join 错误返回时 owned 与 borrowed Future 的析构边界、select 的 default/complete 与 Fuse/集合重激活、async-std 句柄分离后仍完成及显式取消后的资源析构。select 测试前提中发现的 Pending 终止语义与新空集合首次轮询行为已依据源码和实测修正，最终全量无失败。原跳跃/取书/取音乐等立即就绪占位不当作挂起或性能证据；无限流循环只保留教学假设。HTTP 示例仅处理写入错误，未运行监听或声称完整协议/网络验证；握手测试不依赖墙钟竞速。不查询、监听或等待 CI。
 
 ## 第六轮最终本地复核（2026-10-27）
 
