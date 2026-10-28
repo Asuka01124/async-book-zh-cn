@@ -394,3 +394,12 @@
 - 实际打开 futures-core 0.3.31 官方 Stream 文档并附链接；futures-channel/StreamExt 网页工具无法访问，改查本机锁定 futures-channel/futures-util 0.3.34 源码确认 close、poll_next 与 next 要求，不把失败网页当成功浏览。接入已完成 Stream 与 Pinning 章节。
 - Rust 1.96.0 对旧包执行离线锁包 cargo test，既有通道测试 1 项通过、文档测试 0；保留教学 Stream trait 未使用的 dead_code 警告。无行为修改、新测试或新依赖，不把该立即就绪示例称作调度/挂起实测，也未重跑既有全部 123 项测试。
 - mdBook `.tools/round7-chapter37-reviewed`、指定本篇 HTML/链接/锚点检查、原两处 include 比对与 git diff --check 通过。仅完成本篇，等待父验收、commit 与 API 上传成功后才开始下一篇；不查询、监听或等待 CI。
+
+## 第七轮（2026-10-28）：第 38 篇，迭代与并发
+
+- GPT-6 Luna 完整翻译正文与 `examples/05_02_iteration_and_concurrency/src/lib.rs` 原三处英文注释，GPT-6.1 Sol 技术校订；原标题 id `iteration-and-concurrency` 与全部 2 个 include 保留，SUMMARY 同步中文。原文无外链、脚注、参考式章节引用或未完成项。
+- 保留组合器、命令式迭代与并发处理三个主题，将不存在的 TryStreamExt::try_map 校正为 map_ok/and_then，并显式说明校订原因；区分错误元素转发和消费操作提前返回。补 next/try_next 的结果形状、? 与固定可变引用的 Unpin 边界。
+- 核查同任务并发而非 spawn/线程并行、limit 1/0/Some(0)/None 语义、有界背压及无限并发风险、单元素内两步顺序与跨元素顺序不保证；说明源/子 Future 错误快速返回并丢弃内部未完成操作，借用的源流仍属调用方，但已消费元素不回放、外部副作用不回滚。源码与正文都明示 jump/report 是立即成功的教学占位，不伪造真实交错。
+- 实际打开 futures 0.3.34 的 StreamExt/TryStreamExt 官方文档并附正文链接，同时读取本机锁定 try_for_each_concurrent/for_each_concurrent 源码核查 limit 转换与错误清空行为。接入已完成 Stream 与取消安全章节。
+- Rust 1.96.0 该旧包离线锁包 cargo test：既有 2 项求和测试通过、文档测试 0，无警告；无代码行为修改、新测试或依赖。guide-tests 已有 streams_buffer_order_and_concurrency_limit，父本轮已完整跑过其 106 项，本篇不重复执行，也不把两项求和测试冒称并发/取消实测。
+- mdBook `.tools/round7-chapter38-reviewed`、指定本篇 HTML/链接/锚点检查、原两处 include 比对及 git diff --check 通过。保留父拥有的 check_chapters.py 改动；仅到本篇，等待父验收、commit 与 API 上传成功后再继续；不查询、监听或等待 CI。

@@ -11,7 +11,7 @@ use std::{
 
 // ANCHOR: nexts
 async fn sum_with_next(mut stream: Pin<&mut dyn Stream<Item = i32>>) -> i32 {
-    use futures::stream::StreamExt; // for `next`
+    use futures::stream::StreamExt; // 用于 `next`
     let mut sum = 0;
     while let Some(item) = stream.next().await {
         sum += item;
@@ -22,7 +22,7 @@ async fn sum_with_next(mut stream: Pin<&mut dyn Stream<Item = i32>>) -> i32 {
 async fn sum_with_try_next(
     mut stream: Pin<&mut dyn Stream<Item = Result<i32, io::Error>>>,
 ) -> Result<i32, io::Error> {
-    use futures::stream::TryStreamExt; // for `try_next`
+    use futures::stream::TryStreamExt; // 用于 `try_next`
     let mut sum = 0;
     while let Some(item) = stream.try_next().await? {
         sum += item;
@@ -50,7 +50,7 @@ fn run_sum_with_try_next() {
 async fn jump_around(
     mut stream: Pin<&mut dyn Stream<Item = Result<u8, io::Error>>>,
 ) -> Result<(), io::Error> {
-    use futures::stream::TryStreamExt; // for `try_for_each_concurrent`
+    use futures::stream::TryStreamExt; // 用于 `try_for_each_concurrent`
     const MAX_CONCURRENT_JUMPERS: usize = 100;
 
     stream.try_for_each_concurrent(MAX_CONCURRENT_JUMPERS, |num| async move {
@@ -63,5 +63,6 @@ async fn jump_around(
 }
 // ANCHOR_END: try_for_each_concurrent
 
+// 教学占位：立即成功，不执行实际跳跃、报告或异步等待。
 async fn jump_n_times(_: u8) -> Result<(), io::Error> { Ok(()) }
 async fn report_n_jumps(_: u8) -> Result<(), io::Error> { Ok(()) }
