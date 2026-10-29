@@ -490,3 +490,12 @@
 - 实际打开 Rust 1.77 官方公告确认间接递归稳定；旧 html 链接重定向后成功，GitHub PR117703 网页工具两次 cache miss，保留链接但未声称阅读成功。说明 BoxFuture 的 Send/static 是具体别名附加条件，非异步递归所需；Box::pin 不消除深层 poll/析构调用栈风险。
 - 原 recursive/recursive_pinned 均无基本终止条件，只编译不运行，正文明确第二次调用无法到达与栈/内存风险。新增 count_levels 有界递归、第三处 include 及 1 项测试，验证深度 0/8 的基本分支与计数。Rust1.96 显式 cargo +1.96.0 离线锁包该旧包 1 项通过、文档测试 0，无警告/新依赖；累计 135 项（独立 114、旧 workspace 21），未重跑全量。
 - cargo +1.96.0 fmt --check、mdBook `.tools/round8-chapter47-reviewed`、指定单篇 HTML/链接/旧锚点及 git diff --check 通过。保留父拥有的检查脚本改动；到此停止，等待父验收、commit 与 API 上传成功才处理第 48 篇；不查询、监听或等待 CI。
+
+## 第八轮（2026-10-29）：第 48 篇，Trait 中的 async
+
+- 父确认第 47 篇 a293116f47964c8292eb4c251e5309a5b6b19281 已 API 上传成功后开始本篇。GPT-6 Luna 全文翻译原三段及最后更新链接，GPT-6.1 Sol 技术校订与示例补写；保留 async-in-traits 旧锚点、2022 nightly/async-trait 仓库/2023 稳定公告原三 URL，SUMMARY 同步中文。原文无源码、include、脚注或参考式定义；本次新增三处源码 include。
+- 更新原稳定 Rust 不支持 async trait 的过时说法为 1.75 已稳定；保留 nightly 与宏变通历史。解释原生静态分发不要求每次额外装箱、方法本身仍可分配；泛型接口的返回 Future Send 保证与实现类型 Send 不同、借用生命周期与任务 static 条件、原生 dyn 兼容限制及 Self:Sized 不能让该方法动态调用；展示手动 BoxFuture 类型擦除与局部借用。
+- 完整保留原开销主题，明确装箱/动态分派针对具体方案，取消“绝大多数应用不显著”及每秒调用次数阈值式普遍结论，建议实际测量。实际打开官方 2023 稳定公告、2022 nightly 文（旧 html 跳转后成功）、Rust Reference 当前 dyn 规则及 async-trait 仓库；解释宏常见改写、Send/?Send与约束，未新增宏依赖或声称运行宏。
+- 新增 legacy_async_traits 模块与 1 项测试，验证原生泛型调用、显式 Future+Send 契约后 spawn、借用局部 String 的手动 boxed dyn 调用均返回相同结果；它们是立即就绪接口示例，不是 I/O、线程迁移或性能实测。私有教学接口普通库构建不调用，限定模块允许 dead_code，并非隐藏行为测试失败。
+- 显式 rustc +1.96.0 edition2021 两个负例分别实测 E0277（仅实现类型 Send 不保证返回 Future Send）、E0038（原生异步方法不支持 dyn），源码与真实诊断保存在 `.tools/round8-traits-check`。cargo +1.96.0 离线锁包最终该模块 1 项通过、114 项过滤、无警告；累计 136 项（独立 115、旧 workspace 21），本篇未运行全量。
+- cargo +1.96.0 fmt --check、mdBook `.tools/round8-chapter48-reviewed`、指定单篇 HTML/链接/旧锚点及 git diff --check 通过。保留父拥有的检查脚本改动；本轮六篇到此停止，等待父验收、commit/API 上传及最终全量汇总，不延伸 ecosystem 等后续页；不查询、监听或等待 CI。

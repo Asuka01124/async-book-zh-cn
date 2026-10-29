@@ -25,3 +25,4 @@ pub mod structured;
 pub mod primer;
 pub mod legacy_timeouts;
 pub mod legacy_unordered;
+pub mod legacy_async_traits;
