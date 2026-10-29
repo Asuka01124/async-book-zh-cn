@@ -23,3 +23,4 @@ pub mod async_ffi;
 pub mod rustc_async;
 pub mod structured;
 pub mod primer;
+pub mod legacy_timeouts;

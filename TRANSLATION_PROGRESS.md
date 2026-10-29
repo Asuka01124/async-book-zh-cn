@@ -450,3 +450,11 @@
 - 保留连接处理教学结构，仅将丢弃句柄下会静默丢失的process_request错误改为在子任务内eprintln观察；指出仅写固定HTTP字节，不解析请求/非完整HTTP服务器，普通async main需运行时入口、无限接受与无关闭/背压策略未被包装成生产实现。本次未运行该监听示例或声称网络实测。
 - 新增1项确定性oneshot握手测试：任务已启动后丢句柄，再放行并收到完成结果；另在资源guard已构造的任务中显式cancel，验证None与析构通知。无墙钟竞速、无新依赖。Rust1.96离线锁包2项通过（原join_all三任务+新增1）、文档测试0，无警告；原3秒等待仅保留原测试，不作为性能比较。累计已有126项（独立106、旧workspace20），本篇未重跑全部。
 - 指定包cargo fmt已执行；mdBook `.tools/round7-chapter42-reviewed`、指定本篇HTML/链接/锚点、原2include比对与git diff --check通过。保留父拥有的check_chapters.py改动；本轮六篇到此完成，未延伸后续TODO导航，等待父验收/commit/API上传与最终汇总；不查询、监听或等待CI。
+
+## 第八轮（2026-10-29）：第 43 篇，取消与超时
+
+- 上游仅有 SUMMARY 中 Cancellation and Timeouts 空目录项，无英文正文、旧锚点、include 或外链。GPT-6 Luna 仅翻译标题，GPT-6.1 Sol 原创完整教程与示例；正文明确归因，新增 cancellation-and-timeouts 锚点及两处源码 include，SUMMARY 仅替换当前一项，未开始下一项。
+- 教程解释 owned/borrowed Future 生命周期、取消不回滚与取消安全、timeout 的两层 Result/总预算、运行时定时器前提、协作调度与非硬实时边界、Tokio JoinHandle 超时分离/保留后 abort+await、关闭通知与异步清理、排空队列及已取得发送许可边界。公开借用示例同时处理首轮 Ok/Err，不把一秒期限误写成真实调度必然超时的契约。
+- 实际打开 Tokio 1.54.1 timeout、JoinHandle、select 官方文档，并读取本机锁定 timeout.rs 核实先 poll 工作再检查期限；接入既有取消安全、定时器与清理章节，无新依赖、无既有参考模块行为变更。
+- 新增 examples/guide-tests/src/legacy_timeouts.rs 四项行为测试：拥有的工作超时析构且保留副作用、借用超时后恢复、拥有句柄超时后任务继续以及保留句柄中止后析构、关闭后缓冲排空并 join。超时测试使用暂停时间，握手保证任务启动；没有墙钟竞速或真实 I/O。首轮默认工具链实际为 1.94.1，后明确使用 cargo +1.96.0，最终四项通过、106 项过滤、无警告，累计 130 项（独立 110、旧 workspace 20）；未声称运行全量。
+- 最终 cargo +1.96.0 fmt --check、mdBook `.tools/round8-chapter43-final2`、指定单篇 HTML/本地链接/锚点检查与 git diff --check 通过。保留父拥有的 scripts/check_chapters.py 改动；到此停止，等待父验收、commit 与 API 上传成功后才处理第 44 篇；不查询、监听或等待 CI。

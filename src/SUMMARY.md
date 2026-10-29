@@ -58,7 +58,7 @@
   - [`join!`](06_multiple_futures/02_join.md)
   - [`select!`](06_multiple_futures/03_select.md)
   - [生成任务（Spawning）](06_multiple_futures/04_spawning.md)
-  - [TODO: Cancellation and Timeouts]()
+  - [取消与超时](06_multiple_futures/05_cancellation_and_timeouts.md)
   - [TODO: `FuturesUnordered`]()
 - [Workarounds to Know and Love](07_workarounds/01_chapter.md)
   - [`Send` Approximation](07_workarounds/03_send_approximation.md)
