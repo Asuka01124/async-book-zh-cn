@@ -61,7 +61,7 @@
   - [取消与超时](06_multiple_futures/05_cancellation_and_timeouts.md)
   - [无序 Futures 集合（`FuturesUnordered`）](06_multiple_futures/06_futures_unordered.md)
 - [值得了解并善用的变通方案](07_workarounds/01_chapter.md)
-  - [`Send` Approximation](07_workarounds/03_send_approximation.md)
+  - [`Send` 的近似判定](07_workarounds/03_send_approximation.md)
   - [Recursion](07_workarounds/04_recursion.md)
   - [`async` in Traits](07_workarounds/05_async_in_traits.md)
 - [The Async Ecosystem](08_ecosystem/00_chapter.md)

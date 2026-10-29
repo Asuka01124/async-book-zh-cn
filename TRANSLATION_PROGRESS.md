@@ -474,3 +474,11 @@
 - 保留功能开发与诊断不足的历史背景及介绍常见问题/变通方法的主题，明确 async/await 自 Rust 1.39（2019 年）已稳定，不再把“仍相对较新”当现状。实际打开 Rust 官方稳定公告并附链接；简短接入 Send、递归、trait async 三节，没有扩成教程。
 - 本篇仅导读文字调整，无新增测试/依赖、未运行代码测试。mdBook `.tools/round8-chapter45-reviewed`、指定单篇 HTML/链接/旧锚点检查及 git diff --check 通过。保留父拥有的检查脚本改动。
 - 到此停止，等待父验收、commit 与 API 上传成功才处理第 46 篇；不查询、监听或等待 CI。
+
+## 第八轮（2026-10-29）：第 46 篇，Send 的近似判定
+
+- 父确认第 45 篇 13daedd590d8faa5387fdd3e61c6cfce8212eeeb 已 API 上传成功后开始本篇。GPT-6 Luna 全文翻译原标题与所有段落，原代码无英文注释；GPT-6.1 Sol 技术校订。保留 send-approximation 旧锚点，SUMMARY 同步中文；原文无 include、外链、脚注或参考式引用。
+- 完整保留临时值、命名局部跨 await、显式 drop 与内层作用域主题。实际 Rust 1.96.0 edition2018 编译证实本地创建的 NotSend 显式 drop 后可满足 Send，明确修正原“drop 仍不工作”旧结论；命名值存活跨 await 仍拒绝。旧 generator/GenFuture 内部类型诊断替换为当前实际诊断摘录，不把历史输出当现状。
+- 补充初始捕获的非 Send 参数即使 await 前 drop，尚未轮询的 Future 也持有它，因此仍非 Send；给出 compile_fail 例并说明同步预处理/本地执行边界。区分局部生命周期、编译器分析精度、Send 与 static，并接入已有捕获/Send 章节。
+- 实际打开标准库 Send 官方文档与 Rust Reference 异步函数参数捕获规则；在线标准库为较新版本，仅用于稳定语义，具体代码结论均以本机 Rust 1.96.0 为准。提取最终正文全部 6 个 Rust 块，用 rustc +1.96.0 edition2018 编译：4 个通过、2 个预期失败。源码、真实诊断及结果 JSON 存在 `.tools/round8-send-check`；没有执行这些 Future、没有新增单元测试或依赖，不增加累计测试数。
+- mdBook `.tools/round8-chapter46-reviewed`、指定单篇 HTML/链接/旧锚点及 git diff --check 通过。保留父拥有的检查脚本改动；到此停止，等待父验收、commit 与 API 上传成功才处理第 47 篇；不查询、监听或等待 CI。
