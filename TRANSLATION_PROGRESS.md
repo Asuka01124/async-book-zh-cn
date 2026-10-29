@@ -464,6 +464,13 @@
 - 父确认第 43 篇 b510e4d7f173832375aaf44340607716d95d6db7 已 API 上传成功后开始本篇。上游仅有 FuturesUnordered 空目录项，无正文或旧锚点/include/外链；GPT-6 Luna 翻译中文说明标题，GPT-6.1 Sol 原创完整教程与示例并明确归因。新增 futuresunordered 锚点与两处源码 include，SUMMARY 只替换当前项。
 - 教程覆盖同类型/异构装箱及 Send/生命周期选择、push 不 poll/不 spawn、next 消费驱动与唤醒、无序不代表严格物理先后、内部固定与集合 Unpin、空后重激活及 fuse 永久结束陷阱、Result 继续/短路策略与 owned/borrowed 取消、JoinHandle 分离、buffer_unordered 正数容量与已提前 spawn 的边界。给出完整可运行普通消费与限额消费函数，没有用链接代替教程。
 - 实际打开 futures 0.3.34 FuturesUnordered 与 StreamExt 官方文档，读取本机锁定 futures-util 集合源码确认 push 重置终止状态、poll_next 驱动行为；无新增依赖，也未修改已有参考模块行为。
-- 新增 legacy_unordered 四项确定性测试：push 尚未执行、首次消费真实 Pending、oneshot 控制后加入项先被观察完成、空后重新 push 与 fuse 记住 None；暂停时间的两项公开消费函数；buffer_unordered 首轮仅推进两项且消费一项后才接纳第三项；try_collect 错误返回销毁已明确 Pending 的 owned 工作。测试不依赖多个同时就绪分支的顺序，不冒称真实网络/调度实测。
+- 新增 legacy_unordered 四项确定性测试：push 尚未执行、首次消费真实 Pending、oneshot 控制后加入项先被观察完成、空后重新 push 与 fuse 记住 None；暂停时间下实际调用 collect_jobs 与 limited_jobs 并核对完整输出；buffer_unordered 首轮仅推进两项且消费一项后才接纳第三项；try_collect 错误返回销毁已明确 Pending 的 owned 工作。测试不依赖多个同时就绪分支的顺序，不冒称真实网络/调度实测。
 - Rust 1.96.0 显式 cargo +1.96.0 离线锁包最终四项通过、110 项过滤，无警告；累计 134 项（独立 114、旧 workspace 20），未重跑全量。cargo +1.96.0 fmt --check、mdBook `.tools/round8-chapter44-final`、指定单篇 HTML/链接/锚点及 git diff --check 通过。
 - 父审后将枚举的分配说明收窄为“避免统一异构类型的额外装箱”，明确集合节点仍可能分配；重建 `.tools/round8-chapter44-parent-reviewed` 并通过指定单篇检查。保留父拥有的 scripts/check_chapters.py 改动；完成本篇即停止，等待父验收、commit 与 API 上传成功才处理第 45 篇；不查询、监听或等待 CI。
+
+## 第八轮（2026-10-29）：第 45 篇，值得了解并善用的变通方案
+
+- 父确认第 44 篇 22a3a42a6077a25fe3678e578a05b94fc7cef429 已 API 上传成功后开始本篇。GPT-6 Luna 完整翻译原标题与原段落，GPT-6.1 Sol 校订历史时态；保留 workarounds-to-know-and-love 旧英文锚点，SUMMARY 同步中文。原文无源码、include、外链、脚注或参考式引用。
+- 保留功能开发与诊断不足的历史背景及介绍常见问题/变通方法的主题，明确 async/await 自 Rust 1.39（2019 年）已稳定，不再把“仍相对较新”当现状。实际打开 Rust 官方稳定公告并附链接；简短接入 Send、递归、trait async 三节，没有扩成教程。
+- 本篇仅导读文字调整，无新增测试/依赖、未运行代码测试。mdBook `.tools/round8-chapter45-reviewed`、指定单篇 HTML/链接/旧锚点检查及 git diff --check 通过。保留父拥有的检查脚本改动。
+- 到此停止，等待父验收、commit 与 API 上传成功才处理第 46 篇；不查询、监听或等待 CI。
