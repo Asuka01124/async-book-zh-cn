@@ -482,3 +482,11 @@
 - 补充初始捕获的非 Send 参数即使 await 前 drop，尚未轮询的 Future 也持有它，因此仍非 Send；给出 compile_fail 例并说明同步预处理/本地执行边界。区分局部生命周期、编译器分析精度、Send 与 static，并接入已有捕获/Send 章节。
 - 实际打开标准库 Send 官方文档与 Rust Reference 异步函数参数捕获规则；在线标准库为较新版本，仅用于稳定语义，具体代码结论均以本机 Rust 1.96.0 为准。提取最终正文全部 6 个 Rust 块，用 rustc +1.96.0 edition2018 编译：4 个通过、2 个预期失败。源码、真实诊断及结果 JSON 存在 `.tools/round8-send-check`；没有执行这些 Future、没有新增单元测试或依赖，不增加累计测试数。
 - mdBook `.tools/round8-chapter46-reviewed`、指定单篇 HTML/链接/旧锚点及 git diff --check 通过。保留父拥有的检查脚本改动；到此停止，等待父验收、commit 与 API 上传成功才处理第 47 篇；不查询、监听或等待 CI。
+
+## 第八轮（2026-10-29）：第 47 篇，递归
+
+- 父确认第 46 篇 f26c9f554da80015190a4f73cc8a58367ceab130 已 API 上传成功后开始本篇。GPT-6 Luna 全文翻译及概念代码英文注释翻译，GPT-6.1 Sol 技术校订；保留 recursion 旧锚点、原 2 个 include、Rust 1.77 公告与 PR117703 两个原外链及参考式定义，修正译后中文标签到原定义的显式映射。SUMMARY 同步中文；原文无脚注。
+- 保留状态机/无限大小、历史 BoxFuture 返回 async 块与现代 Box::pin 递归全部主题。明确手写枚举只是有意不可编译的概念伪码，用 ignore 标识；另列仅无间接递归的 compile_fail 例，本机 rustc +1.96.0 edition2018 实际拒绝并生成 E0733，源码/诊断保存 `.tools/round8-recursion-check`。
+- 实际打开 Rust 1.77 官方公告确认间接递归稳定；旧 html 链接重定向后成功，GitHub PR117703 网页工具两次 cache miss，保留链接但未声称阅读成功。说明 BoxFuture 的 Send/static 是具体别名附加条件，非异步递归所需；Box::pin 不消除深层 poll/析构调用栈风险。
+- 原 recursive/recursive_pinned 均无基本终止条件，只编译不运行，正文明确第二次调用无法到达与栈/内存风险。新增 count_levels 有界递归、第三处 include 及 1 项测试，验证深度 0/8 的基本分支与计数。Rust1.96 显式 cargo +1.96.0 离线锁包该旧包 1 项通过、文档测试 0，无警告/新依赖；累计 135 项（独立 114、旧 workspace 21），未重跑全量。
+- cargo +1.96.0 fmt --check、mdBook `.tools/round8-chapter47-reviewed`、指定单篇 HTML/链接/旧锚点及 git diff --check 通过。保留父拥有的检查脚本改动；到此停止，等待父验收、commit 与 API 上传成功才处理第 48 篇；不查询、监听或等待 CI。
