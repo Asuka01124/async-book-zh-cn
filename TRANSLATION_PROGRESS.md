@@ -458,3 +458,12 @@
 - 实际打开 Tokio 1.54.1 timeout、JoinHandle、select 官方文档，并读取本机锁定 timeout.rs 核实先 poll 工作再检查期限；接入既有取消安全、定时器与清理章节，无新依赖、无既有参考模块行为变更。
 - 新增 examples/guide-tests/src/legacy_timeouts.rs 四项行为测试：拥有的工作超时析构且保留副作用、借用超时后恢复、拥有句柄超时后任务继续以及保留句柄中止后析构、关闭后缓冲排空并 join。超时测试使用暂停时间，握手保证任务启动；没有墙钟竞速或真实 I/O。首轮默认工具链实际为 1.94.1，后明确使用 cargo +1.96.0，最终四项通过、106 项过滤、无警告，累计 130 项（独立 110、旧 workspace 20）；未声称运行全量。
 - 最终 cargo +1.96.0 fmt --check、mdBook `.tools/round8-chapter43-final2`、指定单篇 HTML/本地链接/锚点检查与 git diff --check 通过。保留父拥有的 scripts/check_chapters.py 改动；到此停止，等待父验收、commit 与 API 上传成功后才处理第 44 篇；不查询、监听或等待 CI。
+
+## 第八轮（2026-10-29）：第 44 篇，无序 Futures 集合
+
+- 父确认第 43 篇 b510e4d7f173832375aaf44340607716d95d6db7 已 API 上传成功后开始本篇。上游仅有 FuturesUnordered 空目录项，无正文或旧锚点/include/外链；GPT-6 Luna 翻译中文说明标题，GPT-6.1 Sol 原创完整教程与示例并明确归因。新增 futuresunordered 锚点与两处源码 include，SUMMARY 只替换当前项。
+- 教程覆盖同类型/异构装箱及 Send/生命周期选择、push 不 poll/不 spawn、next 消费驱动与唤醒、无序不代表严格物理先后、内部固定与集合 Unpin、空后重激活及 fuse 永久结束陷阱、Result 继续/短路策略与 owned/borrowed 取消、JoinHandle 分离、buffer_unordered 正数容量与已提前 spawn 的边界。给出完整可运行普通消费与限额消费函数，没有用链接代替教程。
+- 实际打开 futures 0.3.34 FuturesUnordered 与 StreamExt 官方文档，读取本机锁定 futures-util 集合源码确认 push 重置终止状态、poll_next 驱动行为；无新增依赖，也未修改已有参考模块行为。
+- 新增 legacy_unordered 四项确定性测试：push 尚未执行、首次消费真实 Pending、oneshot 控制后加入项先被观察完成、空后重新 push 与 fuse 记住 None；暂停时间的两项公开消费函数；buffer_unordered 首轮仅推进两项且消费一项后才接纳第三项；try_collect 错误返回销毁已明确 Pending 的 owned 工作。测试不依赖多个同时就绪分支的顺序，不冒称真实网络/调度实测。
+- Rust 1.96.0 显式 cargo +1.96.0 离线锁包最终四项通过、110 项过滤，无警告；累计 134 项（独立 114、旧 workspace 20），未重跑全量。cargo +1.96.0 fmt --check、mdBook `.tools/round8-chapter44-final`、指定单篇 HTML/链接/锚点及 git diff --check 通过。
+- 父审后将枚举的分配说明收窄为“避免统一异构类型的额外装箱”，明确集合节点仍可能分配；重建 `.tools/round8-chapter44-parent-reviewed` 并通过指定单篇检查。保留父拥有的 scripts/check_chapters.py 改动；完成本篇即停止，等待父验收、commit 与 API 上传成功才处理第 45 篇；不查询、监听或等待 CI。
