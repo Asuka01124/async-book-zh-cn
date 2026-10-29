@@ -48,6 +48,12 @@ CHAPTERS = (
     "06_multiple_futures/02_join.md",
     "06_multiple_futures/03_select.md",
     "06_multiple_futures/04_spawning.md",
+    "06_multiple_futures/05_cancellation_and_timeouts.md",
+    "06_multiple_futures/06_futures_unordered.md",
+    "07_workarounds/01_chapter.md",
+    "07_workarounds/03_send_approximation.md",
+    "07_workarounds/04_recursion.md",
+    "07_workarounds/05_async_in_traits.md",
 )
 
 
