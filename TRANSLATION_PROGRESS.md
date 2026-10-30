@@ -529,3 +529,11 @@
 - 显式 Rust 1.96.0、指定 RUSTUP_HOME/CARGO_HOME、CARGO_INCREMENTAL=0：最初 offline --locked cargo check 成功，最终 offline 指定 sync_tcp_server 构建至根 target 成功，无新增依赖；cargo +1.96.0 fmt --check、mdBook `.tools/round9-chapter50-reviewed`、指定单篇 HTML/本地链接/旧锚点检查通过。无新增单元测试，累计仍为 136（独立 115、旧 workspace 21）。
 - 父实际执行 `.tools/round9_sync_smoke.py`，以本包目录启动本次二进制，在有界本机 TCP 检查中验证 GET / 返回 200 且正文与 hello.html 完整字节一致；空连接 EOF 后仍能处理 GET /missing，返回 404 且正文与 404.html 一致。脚本预查 7878 端口，使用 5 秒边界，并在 finally 终止及等待本次监听子进程；这不证明并发或分片 HTTP 正确性，不增加单元测试计数。
 - 本篇到此停止，等待父验收、commit 与 API 上传成功后才开始第 51 篇；保留父检查脚本及用户未跟踪目录，不查询、监听或等待 CI。
+
+## 第九轮（2026-10-30）：第 51 篇，运行异步代码
+
+- 父确认第 50 篇 1943ec7311019594922bf5b6a3a6603a68284a1a 已 API 上传成功后开始本篇。GPT-6 Luna 全文翻译原所有标题、段落和源码英文注释，GPT-6.1 Sol 技术校订；保留两个旧英文锚点、三个 include、原两个 Rust Book 外链及生态章节链接。原控制台警告保留为明确标注的历史输出，并非当前包构建结果；SUMMARY 同步中文。
+- 纠正同步代码不能 poll/必需完整运行时、遗漏 await 必然 connection refused、async/await 自动获得并发/非阻塞等过时或绝对说法。实际打开 Rust Reference 异步函数规则与 async-std main 属性、sleep 文档；标明 Future 构造与轮询执行的区别、宏 attributes 功能、当前清单 1.12 的 semver 含义及锁文件 1.13.2、async-std 停止维护背景。最初尝试单独 async-block-expr Reference 页面不可访问，改读 functions 页面成功。
+- 明确 09_02 是没有 HTTP 处理的签名空桩，仅将未使用的 mut stream 改为 _stream 并写明阶段；09_03 保留 std listener/read/fs/write 的同步阻塞及顺序 await，只最小修复 read n、EOF 返回、有效字节判断与 write_all。说明 task::sleep 仅在等待阶段不阻塞线程、系统连接队列不等于已被应用处理、不能靠浏览器时间差证明并发，重申相对 HTML cwd、短读/HTTP/flush 的教学边界。未修改后续包或新增依赖、测试。
+- 显式 Rust 1.96.0、指定 RUSTUP_HOME/CARGO_HOME、CARGO_INCREMENTAL=0：offline --locked 定向 cargo check async_tcp_server 与 slow_request 成功，无警告；定向 cargo +1.96.0 fmt --check、mdBook `.tools/round9-chapter51-reviewed`、指定单篇 HTML/本地链接/旧锚点检查通过。本篇未启动 TCP 或进行计时实验，不增加测试数，累计仍为 136（独立 115、旧 workspace 21）。
+- 本篇到此停止，等待父验收、commit 与 API 上传成功后才处理第 52 篇；保留父检查脚本及用户未跟踪目录，不查询、监听或等待 CI。

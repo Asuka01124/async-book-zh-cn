@@ -18,14 +18,18 @@ use async_std::task;
 
 async fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 1024];
-    stream.read(&mut buffer).unwrap();
+    // 单次读取不保证得到完整 HTTP 请求；这里仅作顺序处理演示。
+    let n = stream.read(&mut buffer).unwrap();
+    if n == 0 {
+        return;
+    }
 
     let get = b"GET / HTTP/1.1\r\n";
     let sleep = b"GET /sleep HTTP/1.1\r\n";
 
-    let (status_line, filename) = if buffer.starts_with(get) {
+    let (status_line, filename) = if buffer[..n].starts_with(get) {
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
-    } else if buffer.starts_with(sleep) {
+    } else if buffer[..n].starts_with(sleep) {
         task::sleep(Duration::from_secs(5)).await;
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
     } else {
@@ -34,7 +38,8 @@ async fn handle_connection(mut stream: TcpStream) {
     let contents = fs::read_to_string(filename).unwrap();
 
     let response = format!("{status_line}{contents}");
-    stream.write(response.as_bytes()).unwrap();
+    stream.write_all(response.as_bytes()).unwrap();
+    // flush 不是对端已接收或处理响应的确认。
     stream.flush().unwrap();
 }
 // ANCHOR_END: handle_connection

@@ -7,14 +7,14 @@ async fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     for stream in listener.incoming() {
         let stream = stream.unwrap();
-        // Warning: This is not concurrent!
+        // 警告：这并不是并发执行！
         handle_connection(stream).await;
     }
 }
 // ANCHOR_END: main_func
 
 // ANCHOR: handle_connection_async
-async fn handle_connection(mut stream: TcpStream) {
-    //<-- snip -->
+async fn handle_connection(_stream: TcpStream) {
+    // 此处仅展示异步签名，尚未实现请求读取和响应写入。
 }
 // ANCHOR_END: handle_connection_async
