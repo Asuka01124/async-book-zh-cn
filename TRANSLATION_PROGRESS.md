@@ -545,3 +545,12 @@
 - 09_04 保留只写 hello 的占位阶段并明确非 HTTP，最小修复常量命名、读取长度/EOF 与 write_all。09_05 保留 generic Read+Write+Unpin 接口，返回 io::Result，读取长度/EOF、write_all、async_std::fs.await 与 ? 传播错误，子任务内报告处理错误及主循环报告接收错误；现有测试调用加 unwrap 为签名机械适配，其他 Mock 修订留下一篇。未重造 HTTP 解析，正文明确短读误判、路径 cwd、无界资源与超时/关闭等限制。
 - 显式 Rust 1.96.0、指定 RUSTUP_HOME/CARGO_HOME、CARGO_INCREMENTAL=0：offline --locked 定向 cargo check 两包成功无警告，final_tcp_server 原有 1 项测试通过；定向 cargo +1.96.0 fmt --check、mdBook `.tools/round9-chapter52-reviewed`、指定单篇 HTML/链接/旧锚点检查通过。无新增测试或依赖，未启动 TCP 或作性能/并行时序实验；累计仍为 136（独立 115、旧 workspace 21）。
 - 本篇到此停止，等待父验收、commit 与 API 上传成功后才开始第 53 篇；保留父持有的第50篇命令修订和检查脚本及用户未跟踪目录，不查询、监听或等待 CI。
+
+## 第九轮（2026-10-30）：第 53 篇，测试 TCP 服务器
+
+- 父确认第 52 篇 f08cd2ac9a09858f331f7d48f4ab1de4538034dc 已 API 上传成功后开始本篇。GPT-6 Luna 全文翻译原标题与全部段落，GPT-6.1 Sol 技术校订与 Mock/测试补全；保留 testing-the-tcp-server 旧锚点、四个原 include 及所有原主题（原文无外链），SUMMARY 同步中文。
+- 实际打开标准库 TcpListener::bind/Unpin、futures-io AsyncRead/AsyncWrite、async-std Read、Cargo test 官方文档。纠正端口0为请求OS分配临时端口而非无效UNIX端口；签名同步 Result 返回类型，区分 futures/async-std IO 与同步/Tokio trait；说明 Unpin 自动满足，将原 unpin include 改为泛型约束断言，不再手写无必要的 impl。
+- Mock 读取增加游标、EOF与零长度缓冲处理；写入追加已接受字节并支持短写，不再覆盖；读写各一次真实 Pending 前改变就绪状态并 wake。提供读/写/flush 错误开关，内存 close 成功不冒称真实TCP关闭。原200测试改完整字节相等；新增404完整响应、EOF不写、直接poll验证游标/短写/空缓冲/Pending唤醒计数、handler经历Pending与3字节短写后响应完整、读写flush及WriteZero错误传播共5项，合计6项。
+- 显式 Rust 1.96.0、指定 RUSTUP_HOME/CARGO_HOME、CARGO_INCREMENTAL=0：offline --locked final_tcp_server六项测试成功无警告，定向cargo check和fmt --check成功。mdBook `.tools/round9-chapter53-reviewed` 与指定单篇HTML/本地链接/旧锚点检查通过。累计141项（独立115、旧workspace26），本篇未跑其他包全量，未新增依赖或启动真实TCP。
+- 测试输入提供完整请求行，未伪称当前单次read能处理分片HTTP；正文明确模拟器与真实TCP、文件系统仍按cwd读取、HTTP完整性/并行/关闭等未覆盖边界。预期HTML通过include_str编译时读取，未以网络或墙钟等待作为判据。
+- 本篇到此停止，等待父验收、commit与API上传成功后才处理第54篇；保留父持有文件及用户未跟踪目录，不查询、监听或等待CI。
