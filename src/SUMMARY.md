@@ -67,7 +67,7 @@
 - [异步生态系统](08_ecosystem/00_chapter.md)
 - [最终项目：HTTP 服务器](09_example/00_intro.md)
   - [运行异步代码](09_example/01_running_async_code.md)
-  - [Handling Connections Concurrently](09_example/02_handling_connections_concurrently.md)
+  - [并发处理连接](09_example/02_handling_connections_concurrently.md)
   - [Testing the Server](09_example/03_tests.md)
 - [TODO: I/O]()
   - [TODO: `AsyncRead` and `AsyncWrite`]()

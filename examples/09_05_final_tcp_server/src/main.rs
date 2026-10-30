@@ -1,4 +1,4 @@
-use std::fs;
+use async_std::fs;
 
 use futures::stream::StreamExt;
 
@@ -12,9 +12,18 @@ async fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").await.unwrap();
     listener
         .incoming()
-        .for_each_concurrent(/* limit */ None, |stream| async move {
-            let stream = stream.unwrap();
-            spawn(handle_connection(stream));
+        .for_each_concurrent(/* 并发限制 */ None, |stream| async move {
+            match stream {
+                Ok(stream) => {
+                    // 丢弃 async-std 句柄会分离任务；错误在任务内部报告。
+                    spawn(async move {
+                        if let Err(error) = handle_connection(stream).await {
+                            eprintln!("处理连接失败：{error}");
+                        }
+                    });
+                }
+                Err(error) => eprintln!("接受连接失败：{error}"),
+            }
         })
         .await;
 }
@@ -22,19 +31,23 @@ async fn main() {
 
 use async_std::io::{Read, Write};
 
-async fn handle_connection(mut stream: impl Read + Write + Unpin) {
+async fn handle_connection(mut stream: impl Read + Write + Unpin) -> std::io::Result<()> {
     let mut buffer = [0; 1024];
-    stream.read(&mut buffer).await.unwrap();
+    let n = stream.read(&mut buffer).await?;
+    if n == 0 {
+        return Ok(());
+    }
     let get = b"GET / HTTP/1.1\r\n";
-    let (status_line, filename) = if buffer.starts_with(get) {
+    let (status_line, filename) = if buffer[..n].starts_with(get) {
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
     } else {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
     };
-    let contents = fs::read_to_string(filename).unwrap();
+    let contents = fs::read_to_string(filename).await?;
     let response = format!("{status_line}{contents}");
-    stream.write(response.as_bytes()).await.unwrap();
-    stream.flush().await.unwrap();
+    stream.write_all(response.as_bytes()).await?;
+    stream.flush().await?;
+    Ok(())
 }
 
 #[cfg(test)]
@@ -105,7 +118,7 @@ mod tests {
             write_data: Vec::new(),
         };
 
-        handle_connection(&mut stream).await;
+        handle_connection(&mut stream).await.unwrap();
 
         let expected_contents = fs::read_to_string("hello.html").unwrap();
         let expected_response = format!("HTTP/1.1 200 OK\r\n\r\n{}", expected_contents);

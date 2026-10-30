@@ -537,3 +537,11 @@
 - 明确 09_02 是没有 HTTP 处理的签名空桩，仅将未使用的 mut stream 改为 _stream 并写明阶段；09_03 保留 std listener/read/fs/write 的同步阻塞及顺序 await，只最小修复 read n、EOF 返回、有效字节判断与 write_all。说明 task::sleep 仅在等待阶段不阻塞线程、系统连接队列不等于已被应用处理、不能靠浏览器时间差证明并发，重申相对 HTML cwd、短读/HTTP/flush 的教学边界。未修改后续包或新增依赖、测试。
 - 显式 Rust 1.96.0、指定 RUSTUP_HOME/CARGO_HOME、CARGO_INCREMENTAL=0：offline --locked 定向 cargo check async_tcp_server 与 slow_request 成功，无警告；定向 cargo +1.96.0 fmt --check、mdBook `.tools/round9-chapter51-reviewed`、指定单篇 HTML/本地链接/旧锚点检查通过。本篇未启动 TCP 或进行计时实验，不增加测试数，累计仍为 136（独立 115、旧 workspace 21）。
 - 本篇到此停止，等待父验收、commit 与 API 上传成功后才处理第 52 篇；保留父检查脚本及用户未跟踪目录，不查询、监听或等待 CI。
+
+## 第九轮（2026-10-30）：第 52 篇，并发处理连接
+
+- 父确认第 51 篇 e534f12688ed66d2edf4c8fc04a6853a41c5dde4 已 API 上传成功后开始本篇。GPT-6 Luna 全文翻译原所有标题、段落及普通源码注释，GPT-6.1 Sol 技术校订；保留两个原 H1 标题层级及英文锚点、三个 include、Stream 原链接，将原本失效的生态 single-threading-vs-multithreading 片段改为第49篇保留的 single-threaded-vs-multi-threaded-executors；SUMMARY 同步中文。
+- 实际打开 Incoming、StreamExt::for_each_concurrent、async-std spawn/JoinHandle/fs 官方文档。纠正 Stream 实现者为 incoming 返回值、应导入 StreamExt、同一任务并发不等于固定 OS 线程、spawn 不等于每连接专用线程或保证并行。说明 Send/static 接口契约、None/Some(0) 无界、直接等待与生成后立即返回的限制范围不同、async-std 句柄丢弃 detach、任务结果/panic 与关闭管理的教学缺口。
+- 09_04 保留只写 hello 的占位阶段并明确非 HTTP，最小修复常量命名、读取长度/EOF 与 write_all。09_05 保留 generic Read+Write+Unpin 接口，返回 io::Result，读取长度/EOF、write_all、async_std::fs.await 与 ? 传播错误，子任务内报告处理错误及主循环报告接收错误；现有测试调用加 unwrap 为签名机械适配，其他 Mock 修订留下一篇。未重造 HTTP 解析，正文明确短读误判、路径 cwd、无界资源与超时/关闭等限制。
+- 显式 Rust 1.96.0、指定 RUSTUP_HOME/CARGO_HOME、CARGO_INCREMENTAL=0：offline --locked 定向 cargo check 两包成功无警告，final_tcp_server 原有 1 项测试通过；定向 cargo +1.96.0 fmt --check、mdBook `.tools/round9-chapter52-reviewed`、指定单篇 HTML/链接/旧锚点检查通过。无新增测试或依赖，未启动 TCP 或作性能/并行时序实验；累计仍为 136（独立 115、旧 workspace 21）。
+- 本篇到此停止，等待父验收、commit 与 API 上传成功后才开始第 53 篇；保留父持有的第50篇命令修订和检查脚本及用户未跟踪目录，不查询、监听或等待 CI。
