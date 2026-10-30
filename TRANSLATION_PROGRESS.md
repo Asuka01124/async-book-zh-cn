@@ -554,3 +554,12 @@
 - 显式 Rust 1.96.0、指定 RUSTUP_HOME/CARGO_HOME、CARGO_INCREMENTAL=0：offline --locked final_tcp_server六项测试成功无警告，定向cargo check和fmt --check成功。mdBook `.tools/round9-chapter53-reviewed` 与指定单篇HTML/本地链接/旧锚点检查通过。累计141项（独立115、旧workspace26），本篇未跑其他包全量，未新增依赖或启动真实TCP。
 - 测试输入提供完整请求行，未伪称当前单次read能处理分片HTTP；正文明确模拟器与真实TCP、文件系统仍按cwd读取、HTTP完整性/并行/关闭等未覆盖边界。预期HTML通过include_str编译时读取，未以网络或墙钟等待作为判据。
 - 本篇到此停止，等待父验收、commit与API上传成功后才处理第54篇；保留父持有文件及用户未跟踪目录，不查询、监听或等待CI。
+
+## 第九轮（2026-10-30）：第 54 篇，I/O：输入与输出
+
+- 父确认第 53 篇 afd7fa26efecd2b4e2de0ba8bc9e6de961b13b0d 已 API 上传成功后开始本篇。原上游只有 SUMMARY 的 I/O 占位标题，无英文正文；GPT-6 Luna 翻译标题“I/O：输入与输出”，GPT-6.1 Sol 原创教程与可运行示例，正文明确归因。新建 src/10_io/01_chapter.md，单一 io 锚点，SUMMARY 只替换父级 I/O 占位；后续 AsyncRead/AsyncWrite 子项及其他 TODO 保留到后轮，不以空链接引用它们。
+- 教程自成入门：字节流与消息边界、read有效长度/EOF/空缓冲/错误、Pending与Waker、futures/async-std与Tokio ReadBuf接口区别、短写/write_all/flush/持久化层次、缓冲预读/分帧/载荷限额、驱动上下文及文件线程池、取消不撤销已发送/消费字节。实际打开 Tokio AsyncRead、AsyncBufReadExt::fill_buf、AsyncWriteExt::write_all、fs官方文档，并连接已有IO及取消指南。没有声称完整HTTP或真实网络行为。
+- 新增独立 guide-tests 的 legacy_io 模块与lib注册，无新依赖、不改旧workspace。两个源码include：有界LF帧读取函数先检查再追加，返回不含LF的字节载荷，干净EOF=None，截断EOF/超限报错；演示duplex容量2、BufReader容量2并发写读两帧。明确Vec/缓冲/连接等额外内存不受载荷上限一并约束，保留同一reader消费预读数据；解析进度在局部Vec，取消后不能无损重启。
+- 新增3项确定性测试：容量2分片双帧与干净EOF；超限、截断和max=0空帧；实际duplex读取先poll得到Pending、写入后Waker计数增加、读取n=2及shutdown后EOF。显式Rust1.96.0、指定RUSTUP_HOME/CARGO_HOME、CARGO_INCREMENTAL=0，offline --locked 定向测试3项通过、115项过滤，无警告，无墙钟等待或真实网络实验。累计144项（独立118、旧workspace26）；父已另行完成旧workspace26项最终回归，本篇未重复。
+- cargo +1.96.0 fmt --check、mdBook `.tools/round9-chapter54-reviewed`、指定单篇及父脚本默认全部55篇HTML/本地链接/锚点检查通过。保留父拥有的第50/53篇文档修订、README及检查脚本和用户未跟踪目录。
+- 本轮六篇到此完成并停止，等待父验收、commit/API上传及最终全量汇总，不扩展后续子篇/设计模式，不查询、监听或等待CI。
