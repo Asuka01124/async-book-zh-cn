@@ -64,7 +64,7 @@
   - [`Send` 的近似判定](07_workarounds/03_send_approximation.md)
   - [递归](07_workarounds/04_recursion.md)
   - [Trait 中的 `async`](07_workarounds/05_async_in_traits.md)
-- [The Async Ecosystem](08_ecosystem/00_chapter.md)
+- [异步生态系统](08_ecosystem/00_chapter.md)
 - [Final Project: HTTP Server](09_example/00_intro.md)
   - [Running Asynchronous Code](09_example/01_running_async_code.md)
   - [Handling Connections Concurrently](09_example/02_handling_connections_concurrently.md)

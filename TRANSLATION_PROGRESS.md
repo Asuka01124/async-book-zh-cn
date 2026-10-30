@@ -513,3 +513,11 @@
 - 新增 legacy_async_traits 模块与 1 项测试，验证原生泛型调用、显式 Future+Send 契约后 spawn、借用局部 String 的手动 boxed dyn 调用均返回相同结果；它们是立即就绪接口示例，不是 I/O、线程迁移或性能实测。私有教学接口普通库构建不调用，限定模块允许 dead_code，并非隐藏行为测试失败。
 - 显式 rustc +1.96.0 edition2021 两个负例分别实测 E0277（仅实现类型 Send 不保证返回 Future Send）、E0038（原生异步方法不支持 dyn），源码与真实诊断保存在 `.tools/round8-traits-check`。cargo +1.96.0 离线锁包最终该模块 1 项通过、114 项过滤、无警告；累计 136 项（独立 115、旧 workspace 21），本篇未运行全量。
 - cargo +1.96.0 fmt --check、mdBook `.tools/round8-chapter48-reviewed`、指定单篇 HTML/链接/旧锚点及 git diff --check 通过。保留父拥有的检查脚本改动；本轮六篇到此停止，等待父验收、commit/API 上传及最终全量汇总，不延伸 ecosystem 等后续页；不查询、监听或等待 CI。
+
+## 第九轮（2026-10-30）：第 49 篇，异步生态系统
+
+- 以第八轮最终提交 ffc5b97e474ec310918fc131207b81d73bb448ab 为起点。GPT-6 Luna 完整翻译原所有标题、段落及列表，GPT-6.1 Sol 技术校订；保留原七个英文锚点与全部原 URL，SUMMARY 同步中文。原文无源码、include、脚注或参考式定义。
+- 实际打开 async-std 官方文档，确认 1.13.2 文档明确宣布停止维护并建议迁移 smol；保留旧版教学上下文。实际打开 smol::Async 文档，纠正其为结构体而非 trait，并标明受支持 I/O 类型与平台边界。
+- 实际打开 async-io、async-compat、tokio-util::compat、Tokio runtime、async-executor Executor/LocalExecutor 官方文档。纠正 futures executor 不能执行任何 I/O Future 的绝对说法，区分 trait 适配、上下文与持续驱动；不承诺任意兼容层可支持全部运行时 API。说明组合器/流/同步类型是否独立取决于内部依赖，执行器不自动轮询挂起任务；区分并发/并行、Send 接口契约、本地任务和专用阻塞线程。接入已有运行时指南与替代运行时参考。
+- 本篇纯文档，无新增测试、代码、依赖，未运行 Rust 测试；累计测试数保持 136（独立 115、旧 workspace 21）。mdBook `.tools/round9-chapter49-reviewed`、指定单篇 HTML/本地链接/七旧锚点检查与 git diff --check 通过；保留父拥有的检查脚本改动。
+- 本篇完成即停止，等待父验收、commit 与 API 上传成功后才处理第 50 篇；不查询、监听或等待 CI。
