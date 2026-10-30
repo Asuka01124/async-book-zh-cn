@@ -24,7 +24,7 @@
 请先切换到 `examples/09_01_sync_tcp_server` 目录，再运行服务器：
 
 ```console
-cargo +1.96.0 run --offline --locked
+cargo run
 ```
 
 然后在浏览器中访问 `http://127.0.0.1:7878/`，就会看到来自 Rust 的问候页面。访问其他路径会得到这里的 404 页面；退出时按 `Ctrl+C`。`hello.html` 和 `404.html` 的路径相对于**进程当前工作目录**，并不相对于源码或可执行文件；只在仓库根目录指定 `--manifest-path` 不会改变工作目录。

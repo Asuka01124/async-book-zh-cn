@@ -54,6 +54,12 @@ CHAPTERS = (
     "07_workarounds/03_send_approximation.md",
     "07_workarounds/04_recursion.md",
     "07_workarounds/05_async_in_traits.md",
+    "08_ecosystem/00_chapter.md",
+    "09_example/00_intro.md",
+    "09_example/01_running_async_code.md",
+    "09_example/02_handling_connections_concurrently.md",
+    "09_example/03_tests.md",
+    "10_io/01_chapter.md",
 )
 
 
